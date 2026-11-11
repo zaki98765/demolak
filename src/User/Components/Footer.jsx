@@ -1,9 +1,7 @@
-
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
-  FiArrowRight,
   FiArrowUpRight,
   FiMapPin,
   FiPhone,
@@ -15,6 +13,23 @@ import {
   FiSend,
   FiCheckCircle,
 } from "react-icons/fi";
+
+/*
+  CATALYST EDUCATION — RESPONSIVE FOOTER
+
+  Brand palette:
+  Primary:      #26345C (soft navy)
+  Accent:       #8293C8 (muted periwinkle)
+  Soft Accent:  #EEF1FA
+  Text:         #414653
+  Background:   #FFFFFF
+
+  Requirements:
+  - Tailwind CSS (no separate stylesheet)
+  - react-router-dom
+  - framer-motion
+  - react-icons
+*/
 
 const footerLinks = {
   explore: [
@@ -47,87 +62,77 @@ const socialLinks = [
   { icon: FiLinkedin, label: "LinkedIn", href: "#" },
 ];
 
-function Footer() {
+export default function Footer() {
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
 
-  const handleSubscribe = (e) => {
-    e.preventDefault();
+  const handleSubscribe = (event) => {
+    event.preventDefault();
     if (!email.trim()) return;
 
-    // Demo only: connect this to your newsletter API later.
+    // Demo only: connect this form to your newsletter API.
     setSubscribed(true);
     setEmail("");
   };
 
   return (
-    <footer className="bg-[#101D40] text-white">
-
-      {/* Top CTA */}
-      <div className="border-b border-white/10">
-        <div className="mx-auto flex max-w-7xl flex-col justify-between gap-7 px-5 py-12 sm:px-8 md:flex-row md:items-center">
-          <div>
-            <p className="text-xs font-extrabold uppercase tracking-[0.22em] text-orange-400">
+    <footer className="overflow-hidden bg-white text-[#414653]">
+      {/* Top call-to-action */}
+      <section className="border-b border-[#E8EAF1] bg-gradient-to-r from-[#F7F8FC] via-[#F1F3FA] to-[#F8F9FC]">
+        <div className="mx-auto flex w-full max-w-[1200px] flex-col items-start justify-between gap-6 px-4 py-10 sm:px-6 sm:py-12 md:flex-row md:items-center lg:px-8">
+          <div className="max-w-2xl">
+            <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[#7182B8] sm:text-xs">
               Take the next step
             </p>
-
-            <h2 className="mt-3 max-w-2xl text-3xl font-extrabold leading-tight sm:text-4xl">
+            <h2 className="mt-3 text-2xl font-extrabold leading-tight tracking-tight sm:text-3xl md:text-4xl">
               Your ambition deserves the right guidance.
             </h2>
-
-            <p className="mt-3 text-sm leading-7 text-blue-100/70">
+            <p className="mt-3 max-w-xl text-xs leading-6 text-[#697080] sm:text-sm sm:leading-7">
               Discover your opportunities and start building your future with
-              Lakshya Commerce.
+              Catalyst Education.
             </p>
           </div>
 
           <Link
             to="/contact"
-            className="inline-flex shrink-0 items-center justify-center gap-3 rounded-xl bg-[#F97316] px-7 py-4 text-sm font-extrabold text-white shadow-lg shadow-orange-500/20 transition hover:-translate-y-1 hover:bg-orange-600"
+            className="inline-flex w-full shrink-0 items-center justify-center gap-3 rounded-lg bg-[#26345C] px-6 py-3.5 text-sm font-semibold text-white shadow-sm shadow-[#26345C]/10 transition duration-200 hover:-translate-y-1 hover:bg-[#EEF1FA] sm:w-auto sm:px-7 sm:py-4"
           >
             Talk to Our Team
             <FiArrowUpRight className="text-lg" />
           </Link>
         </div>
-      </div>
+      </section>
 
-      {/* Main footer */}
-      <div className="mx-auto max-w-7xl px-5 py-16 sm:px-8 lg:py-20">
-        <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-12 lg:gap-10">
-
-          {/* Brand */}
+      {/* Main footer content */}
+      <div className="mx-auto w-full max-w-[1200px] px-4 py-12 sm:px-6 sm:py-14 lg:px-8 lg:py-16">
+        <div className="grid grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-12 lg:gap-x-9 lg:gap-y-12">
+          {/* Brand and social links */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 18 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="lg:col-span-4"
+            viewport={{ once: true, amount: 0.15 }}
+            transition={{ duration: 0.45 }}
+            className="sm:col-span-2 lg:col-span-4"
           >
-            <Link to="/" className="inline-flex items-center gap-3">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-orange-500 text-2xl font-extrabold text-white">
-                L
-              </div>
-
-              <div className="leading-tight">
-                <span className="block text-2xl font-extrabold tracking-tight">
-                  LAKSHYA
-                </span>
-                <span className="text-[10px] font-bold uppercase tracking-[0.24em] text-orange-400">
-                  Commerce Academy
-                </span>
-              </div>
+            <Link
+              to="/"
+              className="inline-flex w-[170px] max-w-full items-center rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-[#8293C8] sm:w-[190px]"
+            >
+              <img
+                src="/Catalyst_nobg_Logo.png"
+                alt="Catalyst Education"
+                className="h-auto w-full object-contain"
+              />
             </Link>
 
-            <p className="mt-6 max-w-sm text-sm leading-7 text-blue-100/65">
-              Empowering students through quality commerce education,
-              professional guidance and a learning environment that inspires
-              growth.
+            <p className="mt-5 max-w-md text-xs leading-7 text-[#697080] sm:mt-6 sm:text-sm">
+              Empowering students through quality education, professional
+              guidance and a learning environment that inspires growth.
             </p>
 
-            {/* Social links */}
-            <div className="mt-7 flex items-center gap-3">
+            <div className="mt-6 flex flex-wrap items-center gap-2.5 sm:mt-7">
               {socialLinks.map((social) => {
                 const Icon = social.icon;
-
                 return (
                   <a
                     key={social.label}
@@ -135,7 +140,7 @@ function Footer() {
                     aria-label={social.label}
                     target="_blank"
                     rel="noreferrer"
-                    className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-lg text-blue-100 transition hover:border-orange-500 hover:bg-orange-500 hover:text-white"
+                    className="flex h-10 w-10 items-center justify-center rounded-lg border border-[#E5E8F0] bg-white text-lg text-[#626A7A] transition duration-200 hover:-translate-y-1 hover:border-[#8293C8] hover:bg-[#8293C8] hover:text-[#26345C] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#8293C8]"
                   >
                     <Icon />
                   </a>
@@ -146,16 +151,15 @@ function Footer() {
 
           {/* Explore links */}
           <div className="lg:col-span-2">
-            <h3 className="text-sm font-extrabold uppercase tracking-wider">
+            <h3 className="text-xs font-extrabold uppercase tracking-[0.15em] text-[#30394F] sm:text-sm">
               Explore
             </h3>
-
-            <ul className="mt-6 space-y-4">
+            <ul className="mt-4 space-y-3 sm:mt-6 sm:space-y-4">
               {footerLinks.explore.map((link) => (
                 <li key={link.name}>
                   <Link
                     to={link.path}
-                    className="inline-flex items-center gap-2 text-sm text-blue-100/65 transition hover:text-orange-400"
+                    className="inline-flex items-center gap-2 text-xs text-[#697080] transition-colors hover:text-[#536795] sm:text-sm"
                   >
                     {link.name}
                   </Link>
@@ -164,18 +168,17 @@ function Footer() {
             </ul>
           </div>
 
-          {/* Courses */}
+          {/* Course links */}
           <div className="lg:col-span-2">
-            <h3 className="text-sm font-extrabold uppercase tracking-wider">
+            <h3 className="text-xs font-extrabold uppercase tracking-[0.15em] text-[#30394F] sm:text-sm">
               Our Courses
             </h3>
-
-            <ul className="mt-6 space-y-4">
+            <ul className="mt-4 space-y-3 sm:mt-6 sm:space-y-4">
               {footerLinks.courses.map((link) => (
                 <li key={link.name}>
                   <Link
                     to={link.path}
-                    className="text-sm text-blue-100/65 transition hover:text-orange-400"
+                    className="text-xs text-[#697080] transition-colors hover:text-[#536795] sm:text-sm"
                   >
                     {link.name}
                   </Link>
@@ -184,43 +187,44 @@ function Footer() {
             </ul>
           </div>
 
-          {/* Contact */}
-          <div className="lg:col-span-4">
-            <h3 className="text-sm font-extrabold uppercase tracking-wider">
+          {/* Contact and campuses */}
+          <div className="sm:col-span-2 lg:col-span-4">
+            <h3 className="text-xs font-extrabold uppercase tracking-[0.15em] text-[#30394F] sm:text-sm">
               Get in Touch
             </h3>
 
-            <div className="mt-6 space-y-5">
+            <div className="mt-4 grid gap-4 sm:mt-6 sm:grid-cols-2 lg:grid-cols-1">
               <a
                 href="tel:+910000000000"
-                className="flex items-start gap-3 text-sm text-blue-100/70 transition hover:text-orange-400"
+                className="flex min-w-0 items-start gap-3 text-xs text-[#697080] transition-colors hover:text-[#536795] sm:text-sm"
               >
-                <FiPhone className="mt-1 shrink-0 text-lg text-orange-400" />
-                <span>+91 00000 00000</span>
+                <FiPhone className="mt-0.5 shrink-0 text-base text-[#7182B8]" />
+                <span className="break-all">+91 00000 00000</span>
               </a>
 
               <a
                 href="mailto:info@example.com"
-                className="flex items-start gap-3 text-sm text-blue-100/70 transition hover:text-orange-400"
+                className="flex min-w-0 items-start gap-3 text-xs text-[#697080] transition-colors hover:text-[#536795] sm:text-sm"
               >
-                <FiMail className="mt-1 shrink-0 text-lg text-orange-400" />
-                <span>info@example.com</span>
+                <FiMail className="mt-0.5 shrink-0 text-base text-[#7182B8]" />
+                <span className="break-all">info@example.com</span>
               </a>
 
-              <div className="flex items-start gap-3 text-sm leading-6 text-blue-100/70">
-                <FiMapPin className="mt-1 shrink-0 text-lg text-orange-400" />
+              <div className="flex min-w-0 items-start gap-3 text-xs leading-6 text-[#697080] sm:text-sm">
+                <FiMapPin className="mt-0.5 shrink-0 text-base text-[#7182B8]" />
                 <span>Kerala, India</span>
               </div>
             </div>
 
-            <h4 className="mt-9 text-sm font-bold">Our Campuses</h4>
-
-            <div className="mt-4 flex flex-wrap gap-2">
+            <h4 className="mt-7 text-xs font-bold text-[#30394F] sm:mt-9 sm:text-sm">
+              Our Campuses
+            </h4>
+            <div className="mt-3 flex flex-wrap gap-2 sm:mt-4">
               {footerLinks.campuses.map((campus) => (
                 <Link
                   key={campus.name}
                   to={campus.path}
-                  className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs text-blue-100/70 transition hover:border-orange-500 hover:text-orange-400"
+                  className="rounded-md border border-[#E5E8F0] bg-[#F8F9FC] px-3 py-2 text-[10px] text-[#626A7A] transition-colors hover:border-[#8293C8] hover:text-[#536795] sm:text-xs"
                 >
                   {campus.name}
                 </Link>
@@ -230,85 +234,83 @@ function Footer() {
         </div>
 
         {/* Newsletter */}
-        <div className="mt-16 rounded-2xl border border-white/10 bg-white/[0.04] p-6 sm:p-8">
-          <div className="grid items-center gap-8 md:grid-cols-2">
+        <section className="mt-12 rounded-xl border border-[#E8EAF1] bg-[#F7F8FC] p-5 sm:mt-14 sm:p-7 md:mt-16 md:p-8">
+          <div className="grid items-center gap-6 md:grid-cols-2 md:gap-8">
             <div>
-              <p className="text-xs font-bold uppercase tracking-[0.2em] text-orange-400">
+              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#7182B8] sm:text-xs">
                 Stay connected
               </p>
-
-              <h3 className="mt-3 text-2xl font-extrabold">
+              <h3 className="mt-3 text-xl font-extrabold leading-tight tracking-tight sm:text-2xl">
                 Get updates that move you forward.
               </h3>
-
-              <p className="mt-2 text-sm leading-6 text-blue-100/60">
+              <p className="mt-2 max-w-lg text-xs leading-6 text-[#697080] sm:text-sm">
                 Subscribe for course updates, useful resources and educational
                 insights.
               </p>
             </div>
 
-            <div>
+            <div className="min-w-0">
               {subscribed ? (
-                <div className="flex items-center gap-3 rounded-xl border border-green-400/20 bg-green-400/10 p-4 text-sm text-green-300">
-                  <FiCheckCircle className="text-xl" />
+                <div
+                  role="status"
+                  className="flex items-center gap-3 rounded-lg border border-[#8293C8]/25 bg-[#8293C8]/10 p-4 text-sm text-[#8CEBFF]"
+                >
+                  <FiCheckCircle className="shrink-0 text-xl" />
                   Thank you for subscribing!
                 </div>
               ) : (
                 <form
                   onSubmit={handleSubscribe}
-                  className="flex flex-col gap-3 sm:flex-row"
+                  className="flex min-w-0 flex-col gap-3 sm:flex-row"
                 >
                   <input
                     type="email"
                     required
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(event) => setEmail(event.target.value)}
                     placeholder="Enter your email address"
-                    className="min-w-0 flex-1 rounded-xl border border-white/10 bg-white/5 px-4 py-3.5 text-sm text-white outline-none placeholder:text-blue-100/35 focus:border-orange-400"
+                    aria-label="Email address"
+                    className="h-12 min-w-0 flex-1 rounded-lg border border-[#DDE1EB] bg-white px-4 text-xs text-[#30394F] outline-none placeholder:text-[#30394F]/35 focus:border-[#8293C8] focus:ring-2 focus:ring-[#8293C8]/15 sm:text-sm"
                   />
-
                   <button
                     type="submit"
-                    className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-[#F97316] px-6 py-3.5 text-sm font-bold text-white transition hover:bg-orange-600"
+                    className="inline-flex h-12 shrink-0 items-center justify-center gap-2 rounded-lg bg-[#8293C8] px-5 text-xs font-extrabold text-[#26345C] transition-colors hover:bg-[#EEF1FA] sm:px-6 sm:text-sm"
                   >
                     Subscribe <FiSend />
                   </button>
                 </form>
               )}
-
-              <p className="mt-3 text-xs text-blue-100/40">
+              <p className="mt-3 text-[10px] leading-5 text-[#9298A5] sm:text-xs">
                 You can unsubscribe at any time.
               </p>
             </div>
           </div>
-        </div>
+        </section>
       </div>
 
       {/* Bottom bar */}
-      <div className="border-t border-white/10">
-        <div className="mx-auto flex max-w-7xl flex-col justify-between gap-5 px-5 py-6 text-xs text-blue-100/45 sm:px-8 md:flex-row md:items-center">
-          <p>
-            © {new Date().getFullYear()} Lakshya Commerce. All rights reserved.
+      <div className="border-t border-[#E8EAF1] bg-[#F8F9FC]">
+        <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-4 px-4 py-5 text-center sm:px-6 sm:py-6 md:flex-row md:items-center md:justify-between md:text-left lg:px-8">
+          <p className="m-0 text-[10px] leading-5 text-[#858B98] sm:text-xs">
+            © {new Date().getFullYear()} Catalyst Education. All rights reserved.
           </p>
 
-          <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
+          <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 md:justify-end">
             <Link
               to="/privacy-policy"
-              className="transition hover:text-orange-400"
+              className="text-[10px] text-[#7B8190] transition-colors hover:text-[#536795] sm:text-xs"
             >
               Privacy Policy
             </Link>
-
             <Link
               to="/terms-and-conditions"
-              className="transition hover:text-orange-400"
+              className="text-[10px] text-[#7B8190] transition-colors hover:text-[#536795] sm:text-xs"
             >
               Terms & Conditions
             </Link>
-
             <Link
               to="/contact"
-              className="transition hover:text-orange-400"
+              className="text-[10px] text-[#7B8190] transition-colors hover:text-[#536795] sm:text-xs"
             >
               Contact
             </Link>
@@ -318,5 +320,3 @@ function Footer() {
     </footer>
   );
 }
-
-export default Footer;

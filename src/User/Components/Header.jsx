@@ -1,318 +1,189 @@
 
 import { useState } from "react";
-import { Link, NavLink } from "react-router-dom";
-import { AnimatePresence, motion } from "framer-motion";
+import { Link, useLocation } from "react-router-dom";
 import {
-  FiChevronDown,
-  FiArrowUpRight,
-  FiMenu,
-  FiX,
-  FiPhone,
-  FiBookOpen,
-  FiMapPin,
-} from "react-icons/fi";
-import logo from "../../../public/logo.png"
-
-const courses = [
-  { name: "CA Foundation", path: "/courses/ca-foundation" },
-  { name: "CA Intermediate", path: "/courses/ca-intermediate" },
-  { name: "CA Final", path: "/courses/ca-final" },
-  { name: "ACCA", path: "/courses/acca" },
-  { name: "CMA", path: "/courses/cma" },
-];
-
-const campuses = [
-  { name: "Kozhikode", path: "/campuses/kozhikode" },
-  { name: "Malappuram", path: "/campuses/malappuram" },
-  { name: "Kannur", path: "/campuses/kannur" },
-  { name: "Thrissur", path: "/campuses/thrissur" },
-];
+  motion,
+  AnimatePresence,
+  useScroll,
+  useMotionValueEvent,
+} from "motion/react";
+import { FiArrowUpRight, FiMenu, FiX } from "react-icons/fi";
 
 const navItems = [
   { name: "Home", path: "/" },
-  { name: "About Us", path: "/about" },
+  { name: "Courses", path: "/courses" },
+  { name: "Campuses", path: "/campuses" },
+  { name: "About Us", path: "/about-us" },
   { name: "Success Stories", path: "/success-stories" },
   { name: "Blogs", path: "/blogs" },
 ];
 
-function Header() {
+export default function CatalystNavbar() {
+  const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [activeDropdown, setActiveDropdown] = useState(null);
-  const [mobileSubmenu, setMobileSubmenu] = useState(null);
 
-  const dropdowns = [
-    { name: "Courses", icon: FiBookOpen, items: courses },
-    { name: "Campuses", icon: FiMapPin, items: campuses },
-  ];
+  const { scrollY } = useScroll();
+  const location = useLocation();
 
-  const closeMenus = () => {
-    setMobileOpen(false);
-    setActiveDropdown(null);
-    setMobileSubmenu(null);
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    setScrolled(latest > 80);
+  });
+
+  const glassStyle = {
+    background:
+      "linear-gradient(135deg, rgba(255,255,255,0.82), rgba(238,241,250,0.58))",
+    backdropFilter: "blur(24px) saturate(180%)",
+    WebkitBackdropFilter: "blur(24px) saturate(180%)",
+    border: "1px solid rgba(255,255,255,0.85)",
+    boxShadow:
+      "0 12px 40px rgba(38,52,92,0.10), inset 0 1px 0 rgba(255,255,255,0.95), inset 0 -1px 0 rgba(255,255,255,0.30)",
   };
 
-  const navLinkClass = ({ isActive }) =>
-    `text-sm font-semibold transition-colors ${
-      isActive
-        ? "text-orange-600"
-        : "text-slate-700 hover:text-orange-600"
-    }`;
+  const isActive = (path) =>
+    location.pathname === path ||
+    (path !== "/" && location.pathname.startsWith(path + "/"));
 
   return (
     <>
-      {/* Top announcement bar */}
-      <div className="bg-[#172554] text-white">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-2 text-xs sm:px-8">
-          <p className="font-medium">
-            Your journey towards a successful commerce career starts here.
-          </p>
+      <header className="pointer-events-none fixed inset-x-0 top-0 z-[100] px-3 pt-4 sm:px-6">
+        <motion.nav
+          initial={false}
+          animate={{
+            maxWidth: scrolled ? 1050 : 1280,
+            y: scrolled ? 4 : 0,
+            borderRadius: scrolled ? 999 : 24,
+          }}
+          transition={{
+            type: "spring",
+            stiffness: 220,
+            damping: 30,
+          }}
+          style={glassStyle}
+          className="pointer-events-auto relative mx-auto w-full overflow-visible"
+        >
+          {/* Glass reflection */}
+          <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent" />
 
-          <a
-            href="tel:+910000000000"
-            className="hidden items-center gap-2 text-orange-300 transition hover:text-white sm:flex"
-          >
-            <FiPhone />
-            Talk to our counsellor
-          </a>
-        </div>
-      </div>
-
-      {/* Main header */}
-      <header className="sticky top-0 z-50 border-b border-slate-100 bg-white/95 shadow-sm backdrop-blur-xl">
-        <div className="mx-auto flex h-[76px] max-w-7xl items-center justify-between px-5 sm:px-8">
-
-          {/* Logo */}
-          <Link
-            to="/"
-            onClick={closeMenus}
-            className="flex shrink-0 items-center gap-2"
-          >
-            {/* <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#172554] text-xl font-extrabold text-white"> */}
-              <img src={logo} alt="" srcset="" className="w-40" />
-            {/* </div> */}
-
-            {/* <div className="leading-tight">
-              <span className="block text-xl font-extrabold tracking-tight text-[#172554]">
-                LAKSHYA
-              </span>
-              <span className="text-[10px] font-bold uppercase tracking-[0.23em] text-orange-600">
-                Commerce Academy
-              </span>
-            </div> */}
-          </Link>
-
-          {/* Desktop navigation */}
-          <nav className="hidden items-center gap-7 lg:flex">
-            {navItems.slice(0, 1).map((item) => (
-              <NavLink
-                key={item.path}
-                to={item.path}
-                className={navLinkClass}
-              >
-                {item.name}
-              </NavLink>
-            ))}
-
-            {/* Dropdowns */}
-            {dropdowns.map((dropdown) => {
-              const Icon = dropdown.icon;
-              const isOpen = activeDropdown === dropdown.name;
-
-              return (
-                <div
-                  key={dropdown.name}
-                  className="relative"
-                  onMouseEnter={() => setActiveDropdown(dropdown.name)}
-                  onMouseLeave={() => setActiveDropdown(null)}
-                >
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setActiveDropdown(isOpen ? null : dropdown.name)
-                    }
-                    className="flex items-center gap-1.5 text-sm font-semibold text-slate-700 transition hover:text-orange-600"
-                  >
-                    {dropdown.name}
-                    <FiChevronDown
-                      className={`transition-transform duration-200 ${
-                        isOpen ? "rotate-180" : ""
-                      }`}
-                    />
-                  </button>
-
-                  <AnimatePresence>
-                    {isOpen && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 8 }}
-                        transition={{ duration: 0.18 }}
-                        className="absolute left-1/2 top-full w-64 -translate-x-1/2 pt-5"
-                      >
-                        <div className="rounded-2xl border border-slate-100 bg-white p-3 shadow-xl shadow-slate-900/10">
-                          <div className="mb-2 flex items-center gap-2 border-b border-slate-100 px-3 pb-3">
-                            <Icon className="text-orange-500" />
-                            <span className="text-sm font-bold text-[#172554]">
-                              Explore {dropdown.name}
-                            </span>
-                          </div>
-
-                          {dropdown.items.map((item) => (
-                            <Link
-                              key={item.path}
-                              to={item.path}
-                              onClick={closeMenus}
-                              className="flex items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium text-slate-600 transition hover:bg-orange-50 hover:text-orange-600"
-                            >
-                              {item.name}
-                              <FiArrowUpRight />
-                            </Link>
-                          ))}
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              );
-            })}
-
-            {navItems.slice(1).map((item) => (
-              <NavLink
-                key={item.path}
-                to={item.path}
-                className={navLinkClass}
-              >
-                {item.name}
-              </NavLink>
-            ))}
-          </nav>
-
-          {/* Desktop CTA */}
-          <div className="hidden items-center gap-3 lg:flex">
+          <div className="relative flex h-[72px] items-center justify-between gap-4 px-5 lg:px-7">
+            {/* Logo */}
             <Link
-              to="/contact"
-              className="rounded-lg bg-[#F97316] px-5 py-3 text-sm font-bold text-white shadow-md shadow-orange-500/20 transition hover:-translate-y-0.5 hover:bg-orange-600"
+              to="/"
+              onClick={() => setMobileOpen(false)}
+              className="relative z-20 flex shrink-0 items-center"
             >
-              Enquire Now <FiArrowUpRight className="ml-1 inline" />
+              <img
+                src="/Catalyst_nobg_Logo.png"
+                alt="Catalyst Education"
+                className="h-11 w-auto max-w-[155px] object-contain"
+              />
             </Link>
+
+            {/* Desktop links */}
+            <div className="hidden items-center gap-0.5 lg:flex">
+              {navItems.map((item) => (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  className="group relative whitespace-nowrap rounded-full px-3 py-2 text-[12px] font-semibold transition-colors xl:px-3.5 xl:text-[13px]"
+                >
+                  {isActive(item.path) && (
+                    <motion.span
+                      layoutId="catalyst-active-nav"
+                      className="absolute inset-0 rounded-full bg-[#E5EAF7]/85"
+                      transition={{
+                        type: "spring",
+                        stiffness: 350,
+                        damping: 30,
+                      }}
+                    />
+                  )}
+
+                  <span
+                    className={`relative z-10 transition-colors ${isActive(item.path)
+                        ? "text-[#26345C]"
+                        : "text-[#596681] group-hover:text-[#26345C]"
+                      }`}
+                  >
+                    {item.name}
+                  </span>
+                </Link>
+              ))}
+            </div>
+
+            {/* Desktop CTA */}
+            <Link
+              to="/enquiry"
+              className="group relative hidden shrink-0 items-center gap-2 overflow-hidden rounded-full bg-[#26345C] px-5 py-3 text-[13px] font-semibold text-white shadow-[0_5px_16px_rgba(38,52,92,0.18)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#6678A8] lg:inline-flex"
+            >
+              <span>Enquire Now</span>
+              <FiArrowUpRight className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+            </Link>
+
+            {/* Mobile toggle */}
+            <button
+              type="button"
+              onClick={() => setMobileOpen((prev) => !prev)}
+              aria-label={mobileOpen ? "Close menu" : "Open menu"}
+              aria-expanded={mobileOpen}
+              aria-controls="catalyst-mobile-menu"
+              className="relative z-20 flex h-11 w-11 items-center justify-center rounded-full bg-white/60 text-[#26345C] ring-1 ring-white/80 lg:hidden"
+            >
+              {mobileOpen ? (
+                <FiX size={22} />
+              ) : (
+                <FiMenu size={22} />
+              )}
+            </button>
           </div>
 
-          {/* Mobile menu button */}
-          <button
-            type="button"
-            onClick={() => setMobileOpen(!mobileOpen)}
-            aria-label="Toggle navigation"
-            className="flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 text-xl text-[#172554] lg:hidden"
-          >
-            {mobileOpen ? <FiX /> : <FiMenu />}
-          </button>
-        </div>
-
-        {/* Mobile navigation */}
-        <AnimatePresence>
-          {mobileOpen && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.25 }}
-              className="overflow-hidden border-t border-slate-100 bg-white lg:hidden"
-            >
-              <div className="max-h-[75vh] space-y-1 overflow-y-auto px-5 py-5">
-
-                {navItems.slice(0, 1).map((item) => (
-                  <NavLink
-                    key={item.path}
-                    to={item.path}
-                    onClick={closeMenus}
-                    className={({ isActive }) =>
-                      `block rounded-lg px-3 py-3 text-sm font-semibold ${
-                        isActive
-                          ? "bg-orange-50 text-orange-600"
-                          : "text-slate-700"
-                      }`
-                    }
-                  >
-                    {item.name}
-                  </NavLink>
-                ))}
-
-                {dropdowns.map((dropdown) => (
-                  <div key={dropdown.name}>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setMobileSubmenu(
-                          mobileSubmenu === dropdown.name
-                            ? null
-                            : dropdown.name
-                        )
-                      }
-                      className="flex w-full items-center justify-between rounded-lg px-3 py-3 text-sm font-semibold text-slate-700"
+          {/* Mobile glass dropdown */}
+          <AnimatePresence>
+            {mobileOpen && (
+              <motion.div
+                id="catalyst-mobile-menu"
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.25 }}
+                className="absolute inset-x-0 top-[calc(100%+10px)] overflow-hidden rounded-[26px] border border-white/80 bg-[#F7F8FC]/90 shadow-[0_20px_60px_rgba(38,52,92,0.15)] backdrop-blur-3xl lg:hidden"
+              >
+                <div className="flex flex-col gap-1 p-4">
+                  {navItems.map((item, index) => (
+                    <motion.div
+                      key={item.path}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{
+                        delay: index * 0.04,
+                      }}
                     >
-                      {dropdown.name}
-                      <FiChevronDown
-                        className={`transition ${
-                          mobileSubmenu === dropdown.name ? "rotate-180" : ""
-                        }`}
-                      />
-                    </button>
+                      <Link
+                        to={item.path}
+                        onClick={() => setMobileOpen(false)}
+                        className={`block rounded-2xl px-5 py-3.5 text-sm font-semibold transition-colors ${isActive(item.path)
+                            ? "bg-[#E5EAF7] text-[#26345C]"
+                            : "text-[#596681] hover:bg-white/70 hover:text-[#26345C]"
+                          }`}
+                      >
+                        {item.name}
+                      </Link>
+                    </motion.div>
+                  ))}
 
-                    <AnimatePresence>
-                      {mobileSubmenu === dropdown.name && (
-                        <motion.div
-                          initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: "auto" }}
-                          exit={{ opacity: 0, height: 0 }}
-                          className="overflow-hidden pl-5"
-                        >
-                          {dropdown.items.map((item) => (
-                            <Link
-                              key={item.path}
-                              to={item.path}
-                              onClick={closeMenus}
-                              className="block py-2.5 text-sm text-slate-500 hover:text-orange-600"
-                            >
-                              {item.name}
-                            </Link>
-                          ))}
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
-                ))}
-
-                {navItems.slice(1).map((item) => (
-                  <NavLink
-                    key={item.path}
-                    to={item.path}
-                    onClick={closeMenus}
-                    className={({ isActive }) =>
-                      `block rounded-lg px-3 py-3 text-sm font-semibold ${
-                        isActive
-                          ? "bg-orange-50 text-orange-600"
-                          : "text-slate-700"
-                      }`
-                    }
+                  <Link
+                    to="/enquiry"
+                    onClick={() => setMobileOpen(false)}
+                    className="mt-3 flex items-center justify-center gap-2 rounded-2xl bg-[#26345C] px-5 py-4 text-sm font-bold text-white"
                   >
-                    {item.name}
-                  </NavLink>
-                ))}
-
-                <Link
-                  to="/contact"
-                  onClick={closeMenus}
-                  className="mt-4 flex items-center justify-center rounded-lg bg-[#F97316] px-5 py-3.5 text-sm font-bold text-white"
-                >
-                  Enquire Now <FiArrowUpRight className="ml-2" />
-                </Link>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+                    Enquire Now
+                    <FiArrowUpRight />
+                  </Link>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.nav>
       </header>
     </>
   );
 }
-
-export default Header;

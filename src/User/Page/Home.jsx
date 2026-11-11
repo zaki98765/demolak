@@ -1,38 +1,36 @@
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
   FiArrowRight,
+
+  FiGlobe,
   FiArrowUpRight,
   FiBookOpen,
   FiAward,
   FiUsers,
   FiMapPin,
   FiCheckCircle,
-  FiPlay,
+  FiMonitor,
   FiStar,
   FiTrendingUp,
   FiBriefcase,
   FiTarget,
-  FiChevronRight,
+
 } from "react-icons/fi";
 
+
 const fadeUp = {
-  hidden: { opacity: 0, y: 35 },
+  hidden: { opacity: 0, y: 24 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.65, ease: "easeOut" },
+    transition: { duration: 0.55, ease: "easeOut" },
   },
 };
 
-const stagger = {
-  hidden: {},
-  visible: {
-    transition: { staggerChildren: 0.12 },
-  },
-};
+
 
 function Reveal({ children, className = "" }) {
   return (
@@ -48,13 +46,30 @@ function Reveal({ children, className = "" }) {
   );
 }
 
+function CountUp({ value, suffix = "" }) {
+  const [count, setCount] = useState(0);
+  useEffect(() => {
+    let current = 0;
+    const duration = 1400;
+    const steps = 40;
+    const increment = value / steps;
+    const timer = setInterval(() => {
+      current += 1;
+      setCount(Math.min(value, Math.round(increment * current)));
+      if (current >= steps) clearInterval(timer);
+    }, duration / steps);
+    return () => clearInterval(timer);
+  }, [value]);
+  return <>{count.toLocaleString("en-IN")}{suffix}</>;
+}
+
 function SectionHeading({ eyebrow, title, description, center = false }) {
   return (
     <Reveal className={center ? "mx-auto max-w-2xl text-center" : "max-w-2xl"}>
-      <p className="mb-3 text-xs font-extrabold uppercase tracking-[0.22em] text-orange-600">
+      <p className="mb-3 text-xs font-extrabold uppercase tracking-[0.22em] text-[#6678A8]">
         {eyebrow}
       </p>
-      <h2 className="text-3xl font-extrabold leading-tight tracking-tight text-[#172554] sm:text-4xl lg:text-[44px]">
+      <h2 className="text-3xl font-extrabold leading-tight tracking-tight text-[#26345C] sm:text-4xl lg:text-[44px]">
         {title}
       </h2>
       {description && (
@@ -68,48 +83,58 @@ function SectionHeading({ eyebrow, title, description, center = false }) {
 
 const courses = [
   {
-    title: "CA Foundation",
-    category: "CHARTERED ACCOUNTANCY",
-    description:
-      "Build a strong foundation in accounting, business laws, mathematics and economics.",
-    duration: "4–6 Months",
-    image:
-      "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=900",
-    path: "/courses/ca-foundation",
-    tag: "Start Here",
+    title: "CMA USA",
+    category: "GLOBAL MANAGEMENT ACCOUNTING",
+    description: "Build expertise in management accounting, financial planning and strategic decision-making.",
+    duration: "Approx. 1 Year",
+    image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=900",
+    path: "/courses/cma-usa",
+    tag: "Global Qualification",
   },
   {
-    title: "CA Intermediate",
-    category: "CHARTERED ACCOUNTANCY",
-    description:
-      "Develop professional knowledge and practical skills for your CA journey.",
-    duration: "8–12 Months",
-    image:
-      "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=900",
-    path: "/courses/ca-intermediate",
-    tag: "Popular",
+    title: "CMA India",
+    category: "COST & MANAGEMENT ACCOUNTING",
+    description: "Develop professional skills in cost accounting, financial management and business strategy.",
+    duration: "As per course pathway",
+    image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=900",
+    path: "/courses/cma-india",
+    tag: "Professional",
   },
   {
     title: "ACCA",
     category: "GLOBAL ACCOUNTING",
-    description:
-      "Explore an internationally recognised qualification in accounting and finance.",
-    duration: "Flexible",
-    image:
-      "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=900",
+    description: "Prepare for an internationally recognised qualification in accounting, audit and finance.",
+    duration: "Flexible pathway",
+    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=900",
     path: "/courses/acca",
     tag: "Global Career",
   },
   {
-    title: "CMA",
-    category: "MANAGEMENT ACCOUNTING",
-    description:
-      "Build expertise in financial planning, performance and strategic management.",
-    duration: "Flexible",
-    image:
-      "https://images.unsplash.com/photo-1553877522-43269d4ea984?w=900",
-    path: "/courses/cma",
+    title: "Chartered Accountancy",
+    category: "CHARTERED ACCOUNTANCY",
+    description: "Work towards a career in auditing, taxation, accounting and financial advisory.",
+    duration: "As per ICAI pathway",
+    image: "https://images.unsplash.com/photo-1553877522-43269d4ea984?w=900",
+    path: "/courses/ca",
+    tag: "Career Focused",
+  },
+  {
+    title: "Company Secretary",
+    category: "CORPORATE GOVERNANCE",
+    description: "Study corporate law, governance, compliance and strategic management.",
+    duration: "As per ICSI pathway",
+    image: "https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=900",
+    path: "/courses/cs",
     tag: "Professional",
+  },
+  {
+    title: "Enrolled Agent",
+    category: "US TAXATION",
+    description: "Prepare for the US tax credential focused on taxation and representation before the IRS.",
+    duration: "Flexible pathway",
+    image: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=900",
+    path: "/courses/ea",
+    tag: "Specialist Path",
   },
 ];
 
@@ -141,24 +166,14 @@ const features = [
 ];
 
 const campuses = [
-  {
-    name: "Kozhikode",
-    image:
-      "https://images.unsplash.com/photo-1562774053-701939374585?w=900",
-    path: "/campuses/kozhikode",
-  },
-  {
-    name: "Malappuram",
-    image:
-      "https://images.unsplash.com/photo-1564981797816-1043664bf78d?w=900",
-    path: "/campuses/malappuram",
-  },
-  {
-    name: "Kannur",
-    image:
-      "https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?w=900",
-    path: "/campuses/kannur",
-  },
+  { name: "Calicut", address: "Azhakodi Temple Road, near MGI International School", image: "https://images.unsplash.com/photo-1562774053-701939374585?w=900", path: "/campuses/calicut" },
+  { name: "Vadakara", address: "Edodi, Vadakara", image: "https://images.unsplash.com/photo-1564981797816-1043664bf78d?w=900", path: "/campuses/vadakara" },
+  { name: "Kannur", address: "5th Floor, Capitol Mall, Thana", image: "https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?w=900", path: "/campuses/kannur" },
+  { name: "Manjeri", address: "Manjeri Town, Malappuram", image: "https://images.unsplash.com/photo-1564981797816-1043664bf78d?w=900", path: "/campuses/manjeri" },
+  { name: "Kottakkal", address: "Pullat Tower, Parappur Main Road", image: "https://images.unsplash.com/photo-1562774053-701939374585?w=900", path: "/campuses/kottakkal" },
+  { name: "Perinthalmanna", address: "Moossakkutty Bus Stand Road", image: "https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?w=900", path: "/campuses/perinthalmanna" },
+  { name: "Thrissur", address: "Mahatma Nagar / East Fort area", image: "https://images.unsplash.com/photo-1564981797816-1043664bf78d?w=900", path: "/campuses/thrissur" },
+  { name: "Kochi", address: "Medical Centre Road, Vennala", image: "https://images.unsplash.com/photo-1562774053-701939374585?w=900", path: "/campuses/kochi" },
 ];
 
 const employers = [
@@ -170,36 +185,22 @@ const employers = [
   "Amazon",
   "Microsoft",
   "Infosys",
+  "Tata Consultancy Services",
+  "Wipro",
+  "HCLTech",
+  "Cognizant",
+  "Capgemini",
+  "IBM",
+  "Tech Mahindra",
 ];
 
 const stories = [
-  {
-    name: "Student Success Story 01",
-    role: "Commerce Graduate",
-    qualification: "Professional Qualification",
-    image:
-      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=500",
-    quote:
-      "The right guidance and consistent preparation helped me move closer to my professional goals.",
-  },
-  {
-    name: "Student Success Story 02",
-    role: "Commerce Student",
-    qualification: "Professional Qualification",
-    image:
-      "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500",
-    quote:
-      "The learning environment encouraged me to improve my confidence and develop my knowledge.",
-  },
-  {
-    name: "Student Success Story 03",
-    role: "Commerce Graduate",
-    qualification: "Professional Qualification",
-    image:
-      "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=500",
-    quote:
-      "Having a clear study plan and support made my learning journey more organised.",
-  },
+  { name: "Student Story 01", role: "CMA Aspirant", qualification: "CMA Preparation", image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=500", quote: "The structured classes helped me understand difficult topics step by step." },
+  { name: "Student Story 02", role: "ACCA Aspirant", qualification: "ACCA Preparation", image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500", quote: "Regular practice and mentor support made my preparation more organised." },
+  { name: "Student Story 03", role: "Commerce Graduate", qualification: "Professional Course", image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=500", quote: "I gained clarity about the professional options available after commerce." },
+  { name: "Student Story 04", role: "CA Aspirant", qualification: "CA Preparation", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500", quote: "The learning plan gave me a better routine and helped me stay consistent." },
+  { name: "Student Story 05", role: "CMA USA Aspirant", qualification: "CMA USA Preparation", image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=500", quote: "Concept-focused sessions helped me connect the lessons with practical examples." },
+  { name: "Student Story 06", role: "Commerce Student", qualification: "Career Guidance", image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=500", quote: "The guidance helped me compare courses and choose a direction for my career." },
 ];
 
 const blogs = [
@@ -226,7 +227,90 @@ const blogs = [
   },
 ];
 
+
+
+const heroSlides = [
+  {
+    eyebrow: "YOUR FUTURE STARTS HERE",
+    title: "Build Your Career With",
+    highlight: "Global Qualifications",
+    description:
+      "Gain professional knowledge, learn from experienced mentors and prepare yourself for exciting opportunities in commerce and finance.",
+    primary: "Explore Courses",
+    primaryLink: "/courses",
+    secondary: "Book Free Counselling",
+    secondaryLink: "/enquiry",
+    image: "/images/catalyst-student-1.png",
+    imageAlt: "Graduate representing Catalyst Education students",
+    card1: "Global Qualifications",
+    card1Sub: "Professional learning pathways",
+    card2: "Expert Mentorship",
+    card2Sub: "Guidance throughout your journey",
+    tag: "GLOBAL CAREER PATHWAYS",
+    icon: FiGlobe,
+  },
+  {
+    eyebrow: "LEARN FROM THE BEST",
+    title: "Your Ambition Deserves",
+    highlight: "Expert Guidance",
+    description:
+      "Get structured coaching, personal mentorship and academic support to move confidently towards your professional goals.",
+    primary: "Meet Our Mentors",
+    primaryLink: "/about",
+    secondary: "Talk to Our Team",
+    secondaryLink: "/enquiry",
+    image: "/images/catalyst-student-2.png",
+    imageAlt: "Student learning and preparing for a professional career",
+    card1: "Experienced Faculty",
+    card1Sub: "Learn with expert mentors",
+    card2: "Personal Guidance",
+    card2Sub: "Support throughout your journey",
+    tag: "LEARN WITH CONFIDENCE",
+    icon: FiUsers,
+  },
+  {
+    eyebrow: "MAKE YOUR NEXT MOVE",
+    title: "Turn Your Dreams Into",
+    highlight: "A Successful Career",
+    description:
+      "Explore professional courses, develop practical skills and take confident steps towards a rewarding future in commerce.",
+    primary: "Find Your Course",
+    primaryLink: "/courses",
+    secondary: "Get Career Guidance",
+    secondaryLink: "/enquiry",
+    image: "/images/catalyst-student-3.png",
+    imageAlt: "Graduate celebrating an academic milestone",
+    card1: "Career Focused",
+    card1Sub: "Build practical knowledge",
+    card2: "Career Support",
+    card2Sub: "Guidance for your next step",
+    tag: "SHAPE YOUR TOMORROW",
+    icon: FiAward,
+  },
+];
+
+
 function Home() {
+  const [activeHero, setActiveHero] = useState(0);
+  const currentHero = heroSlides[activeHero];
+  const HeroFeatureIcon = currentHero.icon;
+
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      setActiveHero((current) => (current + 1) % heroSlides.length);
+    }, 6000);
+
+    return () => window.clearInterval(timer);
+  }, []);
+
+  const nextHero = () => {
+    setActiveHero((current) => (current + 1) % heroSlides.length);
+  };
+
+  const prevHero = () => {
+    setActiveHero((current) => (current - 1 + heroSlides.length) % heroSlides.length);
+  };
+
   const [selectedCourse, setSelectedCourse] = useState("CA Foundation");
   const [studentName, setStudentName] = useState("");
   const [phone, setPhone] = useState("");
@@ -240,241 +324,490 @@ function Home() {
   return (
     <div className="overflow-hidden bg-white">
 
-      {/* HERO */}
-      <section className="relative bg-[#F8FAFC]">
-        <div className="absolute -right-32 -top-32 h-[500px] w-[500px] rounded-full bg-orange-100/60 blur-3xl" />
+      {/* HERO CAROUSEL */}
+      <section className="relative overflow-hidden bg-white pb-12 pt-28 sm:pt-32 lg:pb-16 lg:pt-36">
+        <div className="mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-12">
 
-        <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-5 py-16 sm:px-8 sm:py-24 lg:grid-cols-2 lg:py-28">
 
-          <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={stagger}
-          >
-            <motion.div
-              variants={fadeUp}
-              className="mb-6 inline-flex items-center gap-2 rounded-full border border-orange-100 bg-orange-50 px-4 py-2 text-xs font-bold text-orange-700"
-            >
-              <span className="h-2 w-2 rounded-full bg-orange-500" />
-              YOUR FUTURE STARTS WITH THE RIGHT EDUCATION
-            </motion.div>
+          {/* HERO CAROUSEL */}
+          <div className="relative overflow-hidden rounded-[28px] bg-[#10294B] shadow-[0_25px_70px_rgba(25,55,100,0.13)] sm:rounded-[36px]">
 
-            <motion.h1
-              variants={fadeUp}
-              className="max-w-2xl text-4xl font-extrabold leading-[1.12] tracking-tight text-[#172554] sm:text-5xl lg:text-[62px]"
-            >
-              Turn Your
-              <span className="block text-orange-500">
-                Ambition
-              </span>
-              Into Achievement.
-            </motion.h1>
 
-            <motion.p
-              variants={fadeUp}
-              className="mt-6 max-w-xl text-base leading-8 text-slate-600 sm:text-lg"
-            >
-              Build your future in commerce with expert guidance, structured
-              learning and the confidence to achieve your professional goals.
-            </motion.p>
 
-            <motion.div
-              variants={fadeUp}
-              className="mt-9 flex flex-wrap gap-4"
-            >
-              <Link
-                to="/courses"
-                className="inline-flex items-center gap-2 rounded-xl bg-[#F97316] px-7 py-4 text-sm font-bold text-white shadow-lg shadow-orange-500/20 transition hover:-translate-y-1 hover:bg-orange-600"
-              >
-                Explore Courses <FiArrowRight />
-              </Link>
+            {/* FIXED BEST ROCC CENTRE BADGE */}
+            <div className="absolute bottom-5 left-1/2 z-30 hidden -translate-x-1/2 sm:block lg:bottom-7">
+              <div className="flex items-center gap-3 rounded-full border border-[#D5A943]/50 bg-[#17385F]/90 px-5 py-2.5 shadow-[0_8px_25px_rgba(0,0,0,0.22)] backdrop-blur-xl transition-all duration-300 hover:-translate-y-1">
 
-              <Link
-                to="/about"
-                className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-7 py-4 text-sm font-bold text-[#172554] transition hover:border-orange-300 hover:text-orange-600"
-              >
-                Discover Lakshya <FiArrowUpRight />
-              </Link>
-            </motion.div>
-
-            <motion.div
-              variants={fadeUp}
-              className="mt-10 flex flex-wrap items-center gap-5 text-sm text-slate-500"
-            >
-              <span className="flex items-center gap-2">
-                <FiCheckCircle className="text-orange-500" />
-                Career-focused learning
-              </span>
-              <span className="flex items-center gap-2">
-                <FiCheckCircle className="text-orange-500" />
-                Expert guidance
-              </span>
-            </motion.div>
-          </motion.div>
-
-          {/* Hero image */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.94, x: 25 }}
-            animate={{ opacity: 1, scale: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="relative mx-auto w-full max-w-xl"
-          >
-            <div className="absolute -left-5 -top-5 h-full w-full rounded-[32px] border-2 border-orange-200" />
-
-            <div className="relative overflow-hidden rounded-[32px] shadow-2xl">
-              <img
-                src="https://lakshyacommerce.ae/_next/image?url=https%3A%2F%2Flakshyacommerce.s3.ap-south-1.amazonaws.com%2Flakshyacommerce%2Fae%2BWebsite%2Brevamp-39.webp&w=3840&q=75"
-                alt="Students at a university campus"
-                className="h-[390px] w-full object-cover sm:h-[510px]"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#172554]/65 via-transparent to-transparent" />
-
-              <div className="absolute bottom-7 left-7 right-7 text-white">
-                <p className="text-xs font-bold uppercase tracking-[0.2em] text-orange-300">
-                  Your journey matters
-                </p>
-                <h3 className="mt-2 text-2xl font-extrabold sm:text-3xl">
-                  Learn Today.
-                  <br />
-                  Lead Tomorrow.
-                </h3>
-              </div>
-            </div>
-
-            <div className="absolute -bottom-7 -left-5 hidden rounded-2xl border border-slate-100 bg-white p-4 shadow-xl sm:block">
-              <div className="flex items-center gap-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-orange-50 text-2xl text-orange-600">
-                  <FiAward />
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-[#FFE8A3] to-[#D5A943] text-[#10294B]">
+                  <FiAward size={17} />
                 </div>
-                <div>
-                  <p className="font-extrabold text-[#172554]">
-                    Your Success
-                  </p>
-                  <p className="text-xs text-slate-500">
-                    Starts with the right step
-                  </p>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
 
-      {/* TRUST / INTRODUCTION */}
-      <section className="border-y border-slate-100 bg-white">
-        <div className="mx-auto grid max-w-7xl gap-8 px-5 py-10 sm:px-8 md:grid-cols-3">
-          {[
-            {
-              icon: FiBookOpen,
-              title: "Professional Courses",
-              desc: "Explore your academic possibilities",
-            },
-            {
-              icon: FiUsers,
-              title: "Learning Community",
-              desc: "Grow with a supportive environment",
-            },
-            {
-              icon: FiTarget,
-              title: "Career Direction",
-              desc: "Prepare for your next opportunity",
-            },
-          ].map((item) => {
-            const Icon = item.icon;
-            return (
-              <Reveal key={item.title}>
-                <div className="flex items-center gap-4">
-                  <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-orange-50 text-2xl text-orange-600">
-                    <Icon />
-                  </div>
-                  <div>
-                    <h3 className="font-extrabold text-[#172554]">
-                      {item.title}
-                    </h3>
-                    <p className="mt-1 text-sm text-slate-500">
-                      {item.desc}
-                    </p>
-                  </div>
-                </div>
-              </Reveal>
-            );
-          })}
-        </div>
-      </section>
+                <span className="text-xs font-extrabold tracking-wide text-white">
+                  BEST ROCC CENTRE
+                </span>
 
-      {/* COURSES */}
-      <section className="mx-auto max-w-7xl px-5 py-20 sm:px-8 lg:py-28">
-        <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
-          <SectionHeading
-            eyebrow="Explore our programmes"
-            title="Find the right course for your future."
-            description="Discover professional commerce programmes and choose the learning path that matches your ambitions."
-          />
+                <span className="h-5 w-px bg-white/30" />
 
-          <Link
-            to="/courses"
-            className="inline-flex shrink-0 items-center gap-2 text-sm font-bold text-orange-600 hover:text-orange-700"
-          >
-            View all courses <FiArrowUpRight />
-          </Link>
-        </div>
-
-        <motion.div
-          variants={stagger}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.1 }}
-          className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4"
-        >
-          {courses.map((course) => (
-            <motion.div
-              key={course.title}
-              variants={fadeUp}
-              whileHover={{ y: -8 }}
-              className="group overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm transition-shadow hover:shadow-xl"
-            >
-              <div className="relative h-48 overflow-hidden">
-                <img
-                  src={course.image}
-                  alt={course.title}
-                  className="h-full w-full object-cover transition duration-500 group-hover:scale-110"
-                />
-                <span className="absolute left-4 top-4 rounded-full bg-white px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-wide text-orange-600 shadow-sm">
-                  {course.tag}
+                <span className="rounded-full bg-[#D5A943] px-3 py-1 text-[10px] font-black tracking-wider text-[#10294B]">
+                  4 TIMES
                 </span>
               </div>
+            </div>
 
-              <div className="p-5">
-                <p className="text-[10px] font-extrabold tracking-[0.12em] text-orange-600">
-                  {course.category}
-                </p>
-                <h3 className="mt-3 text-xl font-extrabold text-[#172554]">
-                  {course.title}
-                </h3>
-                <p className="mt-3 min-h-[72px] text-sm leading-6 text-slate-500">
-                  {course.description}
-                </p>
 
-                <div className="mt-5 flex items-center justify-between border-t border-slate-100 pt-4">
-                  <span className="text-xs font-semibold text-slate-500">
-                    {course.duration}
+
+            {/* Background decorations */}
+            <div className="pointer-events-none absolute -right-32 -top-40 h-[520px] w-[520px] rounded-full border border-white/10" />
+
+            <div className="pointer-events-none absolute -right-12 -top-20 h-[420px] w-[420px] rounded-full border border-white/10" />
+
+            <div className="pointer-events-none absolute bottom-0 right-0 h-full w-2/3 bg-gradient-to-l from-[#1762B5]/70 via-[#12447D]/40 to-transparent" />
+
+            {/* Fixed-size slide container */}
+            <div
+              className="relative grid h-[960px] grid-cols-1 grid-rows-[560px_400px] sm:h-[900px] sm:grid-rows-[500px_400px] lg:h-[590px] lg:grid-cols-2 lg:grid-rows-1"
+            >
+
+              {/* LEFT CONTENT */}
+              <div
+                key={`content-${activeHero}`}
+                className="relative z-20 flex h-full flex-col justify-center px-7 py-8 sm:px-12 lg:px-14 lg:py-12 animate-hero-content"
+              >
+
+                {/* Eyebrow */}
+                <div className="mb-6 inline-flex w-fit items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 backdrop-blur-md">
+                  <span className="h-2 w-2 rounded-full bg-[#66D6FF]" />
+
+                  <span className="text-[10px] font-bold tracking-[0.18em] text-blue-100 sm:text-xs">
+                    {currentHero.eyebrow}
                   </span>
+                </div>
+
+                <p className="mb-3 text-sm font-semibold tracking-wide text-blue-200">
+                  CATALYST EDUCATION
+                </p>
+
+                {/* Fixed title area */}
+                <div className="flex h-[165px] flex-col justify-center sm:h-[175px]">
+                  <h1 className="max-w-[560px] text-[34px] font-extrabold leading-[1.12] tracking-tight text-white sm:text-5xl lg:text-[40px] xl:text-[56px]">
+                    {currentHero.title}
+                    <span className="mt-1 block text-[#70C7FF]">
+                      {currentHero.highlight}
+                    </span>
+                  </h1>
+                </div>
+
+                {/* Description */}
+                <div className="mt-4 flex min-h-[100px] items-start">
+                  <p className="max-w-[510px] text-sm leading-7 text-blue-100/85 sm:text-base sm:leading-8">
+                    {currentHero.description}
+                  </p>
+                </div>
+
+                {/* CTA Buttons */}
+                <div className="mt-5 flex flex-wrap items-center gap-3">
                   <Link
-                    to={course.path}
-                    aria-label={`Explore ${course.title}`}
-                    className="flex h-9 w-9 items-center justify-center rounded-full bg-orange-50 text-orange-600 transition hover:bg-orange-500 hover:text-white"
+                    to={currentHero.primaryLink}
+                    className="group inline-flex items-center gap-3 rounded-full bg-white px-6 py-3.5 text-sm font-bold text-[#12396B] shadow-lg transition-all duration-300 hover:-translate-y-1 hover:bg-[#DDF3FF]"
                   >
+                    {currentHero.primary}
+
+                    <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#1456A0] text-white transition-transform group-hover:translate-x-1">
+                      <FiArrowUpRight />
+                    </span>
+                  </Link>
+
+                  <Link
+                    to={currentHero.secondaryLink}
+                    className="inline-flex items-center gap-2 rounded-full border border-white/40 px-6 py-4 text-sm font-semibold text-white transition-all duration-300 hover:border-white hover:bg-white/10"
+                  >
+                    {currentHero.secondary}
                     <FiArrowUpRight />
                   </Link>
                 </div>
+
+                {/* Pagination */}
+                <div className="mt-9 flex items-center gap-4">
+                  <span className="text-xs font-bold tracking-widest text-white/60">
+                    {String(activeHero + 1).padStart(2, "0")}
+                  </span>
+
+                  <div className="flex gap-2">
+                    {heroSlides.map((slide, index) => (
+                      <button
+                        key={slide.eyebrow}
+                        type="button"
+                        onClick={() => setActiveHero(index)}
+                        aria-label={`Go to slide ${index + 1}`}
+                        aria-pressed={activeHero === index}
+                        className={`h-1.5 rounded-full transition-all duration-300 ${activeHero === index
+                          ? "w-10 bg-[#70C7FF]"
+                          : "w-5 bg-white/30 hover:bg-white/60"
+                          }`}
+                      />
+                    ))}
+                  </div>
+
+                  <span className="text-xs font-bold tracking-widest text-white/40">
+                    03
+                  </span>
+                </div>
               </div>
-            </motion.div>
-          ))}
-        </motion.div>
+
+              {/* RIGHT IMAGE AREA */}
+
+
+              <div className="relative flex h-full min-h-0 items-end justify-center overflow-hidden lg:items-center">
+
+                {/* Main decorative circle */}
+                <div className="absolute bottom-5 left-1/2 h-[300px] w-[300px] -translate-x-1/2 rounded-full bg-gradient-to-br from-[#BCEBFF] to-[#4C9CEB] opacity-90 sm:h-[350px] sm:w-[350px] lg:bottom-8 lg:left-auto lg:right-10 lg:h-[410px] lg:w-[410px] lg:translate-x-0" />
+
+                {/* Outer circle border */}
+                <div className="absolute bottom-8 left-1/2 h-[270px] w-[270px] -translate-x-1/2 rounded-full border-[16px] border-white/20 sm:h-[320px] sm:w-[320px] lg:bottom-12 lg:left-auto lg:right-[55px] lg:h-[370px] lg:w-[370px] lg:translate-x-0" />
+
+                {/* Student image — positioned behind floating cards */}
+                <img
+                  key={`image-${activeHero}`}
+                  src={currentHero.image}
+                  alt={currentHero.imageAlt}
+                  className="relative z-10 h-full max-h-[440px] w-auto max-w-[95%] translate-x-5 object-contain object-bottom animate-hero-image sm:max-h-[460px] sm:translate-x-8 lg:max-h-[510px] lg:translate-x-5"
+                />
+
+                {/* Feature card 1 — overlaps the student's shoulder */}
+                <div className="absolute left-3 top-10 z-20 hidden items-center gap-3 rounded-2xl border border-white/70 bg-white/95 p-3 shadow-[0_12px_35px_rgba(0,0,0,0.15)] backdrop-blur-xl sm:flex lg:left-0 lg:top-[22%]">
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#E5F3FF] text-[#1762B5]">
+                    <HeroFeatureIcon size={22} />
+                  </div>
+
+                  <div>
+                    <p className="text-sm font-extrabold text-[#26345C]">
+                      {currentHero.card1}
+                    </p>
+                    <p className="mt-0.5 text-[10px] text-gray-500">
+                      {currentHero.card1Sub}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Feature card 2 */}
+                <div className="absolute bottom-16 right-3 z-20 hidden items-center gap-3 rounded-2xl border border-white/60 bg-white/95 p-3 shadow-[0_12px_35px_rgba(0,0,0,0.12)] backdrop-blur-xl sm:flex lg:bottom-[18%] lg:right-0">
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#E5F3FF] text-[#1762B5]">
+                    <FiBookOpen size={22} />
+                  </div>
+
+                  <div>
+                    <p className="text-sm font-extrabold text-[#26345C]">
+                      {currentHero.card2}
+                    </p>
+                    <p className="mt-0.5 text-[10px] text-gray-500">
+                      {currentHero.card2Sub}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Image tag */}
+                <div className="absolute bottom-5 left-1/2 z-20 -translate-x-1/2 whitespace-nowrap rounded-full border border-white/30 bg-[#0D3767]/85 px-4 py-2 text-[9px] font-bold tracking-[0.16em] text-white backdrop-blur-md sm:bottom-8 lg:bottom-7 lg:left-auto lg:right-16 lg:translate-x-0">
+                  {currentHero.tag}
+                </div>
+
+              </div>
+
+
+
+              {/* Desktop arrows */}
+              {/* <div className="absolute bottom-5 right-6 z-30 hidden items-center gap-2 sm:flex lg:bottom-7 lg:right-8">
+                <button
+                  type="button"
+                  onClick={prevHero}
+                  aria-label="Previous slide"
+                  className="flex h-10 w-10 items-center justify-center rounded-full border border-white/30 text-white transition hover:bg-white hover:text-[#12396B]"
+                >
+                  <FiArrowLeft />
+                </button>
+
+                <button
+                  type="button"
+                  onClick={nextHero}
+                  aria-label="Next slide"
+                  className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#12396B] transition hover:bg-[#70C7FF]"
+                >
+                  <FiArrowRight />
+                </button>
+              </div> */}
+            </div>
+          </div>
+
+          {/* COURSE STRIP */}
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-x-8 gap-y-4 border-b border-gray-100 pb-7 sm:gap-x-12 lg:justify-between lg:px-8">
+            <p className="w-full text-center text-[10px] font-bold tracking-[0.2em] text-gray-400 lg:w-auto lg:text-left">
+              EXPLORE YOUR CAREER PATH
+            </p>
+
+            {["CMA USA", "CMA INDIA", "ACCA", "CA", "CS", "EA"].map(
+              (course) => (
+                <Link
+                  key={course}
+                  to="/courses"
+                  className="text-sm font-extrabold tracking-wide text-[#52617D] transition hover:text-[#1762B5] sm:text-base"
+                >
+                  {course}
+                </Link>
+              )
+            )}
+          </div>
+        </div>
+
+        {/* ANIMATIONS */}
+        <style>{`
+        @keyframes heroContent {
+          from {
+            opacity: 0;
+            transform: translateY(18px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes heroImage {
+          from {
+            opacity: 0;
+            transform: translateX(25px) scale(0.97);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0) scale(1);
+          }
+        }
+
+        .animate-hero-content {
+          animation: heroContent 0.65s ease both;
+        }
+
+        .animate-hero-image {
+          animation: heroImage 0.75s ease both;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .animate-hero-content,
+          .animate-hero-image {
+            animation: none;
+          }
+        }
+      `}</style>
       </section>
 
-      {/* WHY LAKSHYA */}
-      <section className="bg-[#F8FAFC] py-20 lg:py-28">
+
+
+
+      {/* ------------------------------------------------------------------------------ */}
+
+
+
+
+      {/* CATALYST AT A GLANCE */}
+
+
+      <section className="relative overflow-hidden bg-white px-5 py-16 sm:px-8 sm:py-20 lg:py-24">
+        <div className="pointer-events-none absolute left-1/2 top-0 h-[300px] w-[700px] -translate-x-1/2 rounded-full bg-[#EAF4FF]/60 blur-[100px]" />
+
+        <div className="relative mx-auto max-w-7xl">
+
+          <Reveal>
+            <div className="mb-12 text-center">
+              <p className="mb-3 text-xs font-extrabold tracking-[0.22em] text-[#1762B5]">
+                CATALYST EDUCATION
+              </p>
+
+              <h2 className="text-3xl font-extrabold tracking-tight text-[#26345C] sm:text-4xl lg:text-5xl">
+                Excellence That
+                <span className="text-[#1762B5]"> Speaks For Itself</span>
+              </h2>
+            </div>
+          </Reveal>
+
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              {
+                value: 500,
+                suffix: "+",
+                label: "EXPERT FACULTIES",
+                icon: FiMonitor,
+              },
+              {
+                value: 25000,
+                suffix: "+",
+                label: "STUDENTS YEARLY",
+                icon: FiUsers,
+              },
+              {
+                value: 30,
+                suffix: "+",
+                label: "SPECIALIZED COURSES",
+                icon: FiBookOpen,
+              },
+              {
+                value: 100,
+                suffix: "%",
+                label: "PLACEMENT SUPPORT",
+                icon: FiBriefcase,
+              },
+            ].map((item, index) => {
+              const Icon = item.icon;
+
+              return (
+                <Reveal key={item.label}>
+                  <div
+                    style={{ transitionDelay: `${index * 120}ms` }}
+                    className="group relative h-full overflow-hidden rounded-[28px] border border-[#E7EDF5] bg-white/75 p-8 text-center shadow-[0_12px_45px_rgba(38,52,92,0.06)] backdrop-blur-2xl transition-all duration-700 hover:-translate-y-2 hover:border-[#B9DFFF] hover:shadow-[0_20px_55px_rgba(23,98,181,0.12)]"
+                  >
+                    {/* Liquid glass highlight */}
+                    <div className="pointer-events-none absolute -right-12 -top-16 h-36 w-36 rounded-full bg-[#DCEEFF]/50 blur-3xl transition-all duration-500 group-hover:bg-[#B8DDFF]/70" />
+
+                    {/* Icon */}
+                    <div className="relative mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full border border-[#DCEEFF] bg-gradient-to-br from-[#F1F8FF] to-[#DCEEFF] text-[#1456A0] shadow-[inset_0_2px_8px_rgba(255,255,255,0.9),0_8px_20px_rgba(23,98,181,0.08)] transition-all duration-500 group-hover:scale-110 group-hover:rotate-3">
+                      <Icon size={27} strokeWidth={2.3} />
+                    </div>
+
+                    {/* Animated counter */}
+                    <h3 className="relative text-4xl font-black tracking-tight text-[#263B55] sm:text-5xl">
+                      <CountUp
+                        value={item.value}
+                        suffix={item.suffix}
+                      />
+                    </h3>
+
+                    {/* Caption */}
+                    <p className="relative mt-3 text-xs font-extrabold tracking-[0.10em] text-[#697586] sm:text-sm">
+                      {item.label}
+                    </p>
+
+                    {/* Bottom accent */}
+                    <div className="mx-auto mt-6 h-1 w-10 rounded-full bg-gradient-to-r from-[#70C7FF] to-[#1762B5] transition-all duration-500 group-hover:w-20" />
+                  </div>
+                </Reveal>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+
+
+
+
+      {/* COURSES - INFINITE MOVING CAROUSEL */}
+      <section className="overflow-hidden bg-white py-20  lg:py-28">
+
+        {/* Section heading */}
+        <div className="mx-auto max-w-7xl px-5 sm:px-8">
+          <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
+            <SectionHeading
+              eyebrow="Explore our programmes"
+              title="Find the right course for your future."
+              description="Discover professional commerce programmes and choose the learning path that matches your ambitions."
+            />
+
+            <Link
+              to="/courses"
+              className="inline-flex shrink-0 items-center gap-2 text-sm font-bold text-[#6678A8] transition hover:text-[#26345C]"
+            >
+              View all courses
+              <FiArrowUpRight />
+            </Link>
+          </div>
+        </div>
+
+        {/* Carousel */}
+        <div className="relative mt-12 overflow-hidden">
+
+          {/* Left blur / fade */}
+          <div className="pointer-events-none absolute inset-y-0 left-0 z-20 w-16 bg-gradient-to-r from-white via-white/90 to-transparent sm:w-28 lg:w-40" />
+
+
+          {/* Moving cards */}
+          <motion.div
+            className="flex w-max gap-6"
+            animate={{
+              x: ["0%", "-50%"],
+            }}
+            transition={{
+              duration: 35,
+              ease: "linear",
+              repeat: Infinity,
+            }}
+          >
+            {[...courses, ...courses].map((course, index) => (
+              <motion.div
+                key={`${course.title}-${index}`}
+                whileHover={{
+                  y: -8,
+                  scale: 1.015,
+                }}
+                className="group w-[280px] shrink-0 overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm transition-shadow duration-300 hover:shadow-xl sm:w-[320px]"
+              >
+
+                {/* Course image */}
+                <div className="relative h-48 overflow-hidden">
+                  <img
+                    src={course.image}
+                    alt={course.title}
+                    loading="lazy"
+                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  />
+
+                  <span className="absolute left-4 top-4 rounded-full border border-white/70 bg-white/90 px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-wide text-[#6678A8] shadow-sm backdrop-blur-md">
+                    {course.tag}
+                  </span>
+                </div>
+
+                {/* Course details */}
+                <div className="p-5">
+
+                  <p className="text-[10px] font-extrabold tracking-[0.12em] text-[#8293C8]">
+                    {course.category}
+                  </p>
+
+                  <h3 className="mt-3 text-xl font-extrabold text-[#26345C]">
+                    {course.title}
+                  </h3>
+
+                  <p className="mt-3 min-h-[72px] text-sm leading-6 text-slate-500">
+                    {course.description}
+                  </p>
+
+                  {/* Card footer */}
+                  <div className="mt-5 flex items-center justify-between border-t border-slate-100 pt-4">
+
+                    <span className="text-xs font-semibold text-slate-500">
+                      {course.duration}
+                    </span>
+
+                    <Link
+                      to={course.path}
+                      aria-label={`Explore ${course.title}`}
+                      className="flex h-9 w-9 items-center justify-center rounded-full bg-[#F1F3F9] text-[#6678A8] transition-all duration-300 hover:bg-[#6678A8] hover:text-white"
+                    >
+                      <FiArrowUpRight />
+                    </Link>
+
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+
+          {/* Right blur / fade */}
+          <div className="pointer-events-none absolute inset-y-0 right-0 z-20 w-16 bg-gradient-to-l from-white via-white/90 to-transparent sm:w-28 lg:w-40" />
+
+        </div>
+      </section>
+
+
+
+      {/* WHY CATALYST */}
+      <section className="bg-[#F7F8FC] py-20 lg:py-28">
         <div className="mx-auto grid max-w-7xl items-center gap-14 px-5 sm:px-8 lg:grid-cols-2">
           <Reveal>
             <div className="relative">
@@ -483,8 +816,8 @@ function Home() {
                 alt="Students learning in a classroom"
                 className="h-[430px] w-full rounded-[28px] object-cover shadow-xl"
               />
-              <div className="absolute -bottom-7 -right-4 max-w-[240px] rounded-2xl bg-[#172554] p-6 text-white shadow-xl sm:-right-7">
-                <FiAward className="text-3xl text-orange-400" />
+              <div className="absolute -bottom-7 -right-4 max-w-[240px] rounded-2xl bg-[#26345C] p-6 text-white shadow-xl sm:-right-7">
+                <FiAward className="text-3xl text-[#8293C8]" />
                 <h3 className="mt-3 text-xl font-extrabold">
                   Learn with Purpose
                 </h3>
@@ -497,7 +830,7 @@ function Home() {
 
           <div>
             <SectionHeading
-              eyebrow="Why Lakshya"
+              eyebrow="Why Catalyst Education"
               title="More than education. A pathway to your ambitions."
               description="A learning experience designed to help students strengthen their knowledge, build confidence and work towards professional goals."
             />
@@ -508,11 +841,11 @@ function Home() {
                 return (
                   <Reveal key={feature.title}>
                     <div className="flex gap-4">
-                      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-orange-100 text-xl text-orange-600">
+                      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#EEF1FA] text-xl text-[#6678A8]">
                         <Icon />
                       </div>
                       <div>
-                        <h3 className="font-extrabold text-[#172554]">
+                        <h3 className="font-extrabold text-[#26345C]">
                           {feature.title}
                         </h3>
                         <p className="mt-2 text-sm leading-6 text-slate-500">
@@ -527,7 +860,7 @@ function Home() {
 
             <Link
               to="/about"
-              className="mt-9 inline-flex items-center gap-2 rounded-lg bg-[#172554] px-6 py-3.5 text-sm font-bold text-white transition hover:bg-orange-600"
+              className="mt-9 inline-flex items-center gap-2 rounded-lg bg-[#26345C] px-6 py-3.5 text-sm font-bold text-white transition hover:bg-[#53658F]"
             >
               Know More About Us <FiArrowRight />
             </Link>
@@ -553,10 +886,10 @@ function Home() {
           ].map(([number, title, desc]) => (
             <Reveal key={number}>
               <div className="relative rounded-2xl border border-slate-100 bg-white p-7 shadow-sm">
-                <span className="text-4xl font-extrabold text-orange-200">
+                <span className="text-4xl font-extrabold text-[#D9DEEC]">
                   {number}
                 </span>
-                <h3 className="mt-5 text-lg font-extrabold text-[#172554]">
+                <h3 className="mt-5 text-lg font-extrabold text-[#26345C]">
                   {title}
                 </h3>
                 <p className="mt-3 text-sm leading-6 text-slate-500">
@@ -568,55 +901,110 @@ function Home() {
         </div>
       </section>
 
-      {/* CAMPUSES */}
-      <section className="bg-[#172554] py-20 text-white lg:py-28">
+
+
+      {/* CAMPUSES - INFINITE MOVING CAROUSEL */}
+      <section className="overflow-hidden bg-[#F7F8FC] py-20 lg:py-28">
+
         <div className="mx-auto max-w-7xl px-5 sm:px-8">
           <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
+
             <SectionHeading
               eyebrow="Our campuses"
               title="A place to learn, connect and grow."
               description="Explore our campus locations and find a learning environment that works for you."
             />
+
             <Link
               to="/campuses"
-              className="inline-flex shrink-0 items-center gap-2 text-sm font-bold text-orange-300 hover:text-white"
+              className="inline-flex shrink-0 items-center gap-2 text-sm font-bold text-[#6678A8] transition hover:text-[#26345C]"
             >
               Explore campuses <FiArrowUpRight />
             </Link>
-          </div>
 
-          <div className="mt-12 grid gap-6 md:grid-cols-3">
-            {campuses.map((campus) => (
-              <Reveal key={campus.name}>
+          </div>
+        </div>
+
+        {/* Campus carousel */}
+        <div className="relative mt-12 overflow-hidden">
+
+          {/* Left white fade */}
+          <div className="pointer-events-none absolute inset-y-0 left-0 z-20 w-16 bg-gradient-to-r from-[#F7F8FC] via-[#F7F8FC]/90 to-transparent sm:w-28 lg:w-40" />
+
+          {/* Moving cards */}
+          <motion.div
+            className="flex w-max gap-6"
+            animate={{ x: ["0%", "-50%"] }}
+            transition={{
+              duration: 40,
+              ease: "linear",
+              repeat: Infinity,
+            }}
+          >
+
+            {[...campuses, ...campuses].map((campus, index) => (
+              <motion.div
+                key={`${campus.name}-${index}`}
+                whileHover={{ y: -8, scale: 1.015 }}
+                className="group relative h-[330px] w-[280px] shrink-0 overflow-hidden rounded-2xl shadow-sm transition-shadow duration-300 hover:shadow-xl sm:h-[370px] sm:w-[340px]"
+              >
+
                 <Link
                   to={campus.path}
-                  className="group relative block h-[330px] overflow-hidden rounded-2xl"
+                  className="absolute inset-0 block"
+                  aria-label={`Explore ${campus.name} campus`}
                 >
+
+                  {/* Campus image */}
                   <img
                     src={campus.image}
                     alt={`${campus.name} campus`}
-                    className="h-full w-full object-cover transition duration-700 group-hover:scale-110"
+                    loading="lazy"
+                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0B1535]/90 via-[#172554]/10 to-transparent" />
-                  <div className="absolute bottom-6 left-6 right-6 flex items-end justify-between">
-                    <div>
-                      <p className="mb-2 flex items-center gap-2 text-xs font-semibold text-orange-300">
-                        <FiMapPin /> LAKSHYA CAMPUS
-                      </p>
-                      <h3 className="text-2xl font-extrabold">
-                        {campus.name}
-                      </h3>
+
+                  {/* Image overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#18233F]/90 via-[#26345C]/20 to-transparent transition-opacity duration-500 group-hover:from-[#18233F]/95" />
+
+                  {/* Campus details */}
+                  <div className="absolute bottom-0 left-0 right-0 p-6 text-white sm:p-7">
+
+                    <p className="mb-3 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.16em] text-[#D9DEEC]">
+                      <FiMapPin className="text-sm" />
+                      Catalyst Education Campus
+                    </p>
+
+                    <div className="flex items-end justify-between gap-3">
+
+                      <div>
+                        <h3 className="text-2xl font-extrabold tracking-tight sm:text-3xl">
+                          {campus.name}
+                        </h3>
+
+                        <p className="mt-2 max-w-[230px] text-xs leading-5 text-white/80">
+                          {campus.address}
+                        </p>
+                      </div>
+
+                      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white text-[#26345C] transition-all duration-300 group-hover:bg-[#6678A8] group-hover:text-white group-hover:rotate-45">
+                        <FiArrowUpRight className="text-lg" />
+                      </span>
+
                     </div>
-                    <span className="flex h-11 w-11 items-center justify-center rounded-full bg-white text-[#172554] transition group-hover:bg-orange-500 group-hover:text-white">
-                      <FiArrowUpRight />
-                    </span>
                   </div>
+
                 </Link>
-              </Reveal>
+              </motion.div>
             ))}
-          </div>
+
+          </motion.div>
+
+          {/* Right white fade */}
+          <div className="pointer-events-none absolute inset-y-0 right-0 z-20 w-16 bg-gradient-to-l from-[#F7F8FC] via-[#F7F8FC]/90 to-transparent sm:w-28 lg:w-40" />
+
         </div>
       </section>
+
 
       {/* EMPLOYER BRAND SHOWCASE */}
       <section className="bg-white py-20 lg:py-24">
@@ -629,23 +1017,25 @@ function Home() {
           />
 
           <Reveal>
-            <div className="mt-12 rounded-3xl border border-slate-100 bg-[#F8FAFC] px-5 py-10 sm:px-10">
+            <div className="mt-12 rounded-3xl border border-slate-100 bg-[#F7F8FC] px-5 py-10 sm:px-10">
               <p className="text-center text-xs font-bold uppercase tracking-[0.2em] text-slate-400">
                 Examples of recognised global employers
               </p>
-              <div className="mt-9 grid grid-cols-2 items-center gap-8 sm:grid-cols-4">
-                {employers.map((employer) => (
-                  <div
-                    key={employer}
-                    className="text-center text-xl font-extrabold tracking-tight text-slate-500 transition hover:text-[#172554] sm:text-2xl"
-                  >
-                    {employer}
-                  </div>
-                ))}
+              <div className="relative mt-9 overflow-hidden">
+                <motion.div
+                  className="flex w-max items-center gap-14 py-3"
+                  animate={{ x: ["0%", "-50%"] }}
+                  transition={{ duration: 24, ease: "linear", repeat: Infinity }}
+                >
+                  {[...employers, ...employers].map((employer, index) => (
+                    <div key={`${employer}-${index}`} className="min-w-[120px] text-center text-xl font-extrabold tracking-tight text-slate-400 transition hover:text-[#26345C] sm:text-2xl">
+                      {employer}
+                    </div>
+                  ))}
+                </motion.div>
               </div>
               <p className="mt-8 text-center text-xs leading-5 text-slate-400">
-                Illustrative employer examples only. These are not verified
-                Lakshya placement partners or alumni employers.
+                Employer names are illustrative examples only and do not imply a verified placement partnership.
               </p>
             </div>
           </Reveal>
@@ -653,7 +1043,7 @@ function Home() {
       </section>
 
       {/* STUDENT STORIES */}
-      <section className="bg-[#F8FAFC] py-20 lg:py-28">
+      <section className="bg-[#F7F8FC] py-20 lg:py-28">
         <div className="mx-auto max-w-7xl px-5 sm:px-8">
           <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
             <SectionHeading
@@ -663,7 +1053,7 @@ function Home() {
             />
             <Link
               to="/success-stories"
-              className="inline-flex items-center gap-2 text-sm font-bold text-orange-600"
+              className="inline-flex items-center gap-2 text-sm font-bold text-[#6678A8]"
             >
               View all stories <FiArrowUpRight />
             </Link>
@@ -680,7 +1070,7 @@ function Home() {
                       className="h-16 w-16 rounded-full object-cover"
                     />
                     <div>
-                      <h3 className="font-extrabold text-[#172554]">
+                      <h3 className="font-extrabold text-[#26345C]">
                         {story.name}
                       </h3>
                       <p className="mt-1 text-xs text-slate-500">
@@ -689,7 +1079,7 @@ function Home() {
                     </div>
                   </div>
 
-                  <div className="mt-5 flex gap-1 text-orange-400">
+                  <div className="mt-5 flex gap-1 text-[#8293C8]">
                     {[1, 2, 3, 4, 5].map((star) => (
                       <FiStar key={star} className="fill-current" />
                     ))}
@@ -699,7 +1089,7 @@ function Home() {
                     "{story.quote}"
                   </p>
 
-                  <p className="mt-5 border-t border-slate-100 pt-4 text-xs font-bold text-orange-600">
+                  <p className="mt-5 border-t border-slate-100 pt-4 text-xs font-bold text-[#6678A8]">
                     {story.qualification}
                   </p>
                 </div>
@@ -707,8 +1097,7 @@ function Home() {
             ))}
           </div>
           <p className="mt-5 text-center text-xs text-slate-400">
-            Demo profiles and testimonials. Replace with approved real student
-            stories before publishing.
+            Review cards currently contain sample placeholder copy. Replace with verified student testimonials and consented photos before publishing.
           </p>
         </div>
       </section>
@@ -723,7 +1112,7 @@ function Home() {
           />
           <Link
             to="/blogs"
-            className="inline-flex items-center gap-2 text-sm font-bold text-orange-600"
+            className="inline-flex items-center gap-2 text-sm font-bold text-[#6678A8]"
           >
             Explore all articles <FiArrowUpRight />
           </Link>
@@ -740,13 +1129,13 @@ function Home() {
                     className="h-56 w-full object-cover transition duration-500 group-hover:scale-105"
                   />
                 </div>
-                <p className="mt-5 text-xs font-extrabold tracking-[0.15em] text-orange-600">
+                <p className="mt-5 text-xs font-extrabold tracking-[0.15em] text-[#6678A8]">
                   {blog.category}
                 </p>
-                <h3 className="mt-3 text-xl font-extrabold leading-snug text-[#172554] transition group-hover:text-orange-600">
+                <h3 className="mt-3 text-xl font-extrabold leading-snug text-[#26345C] transition group-hover:text-[#6678A8]">
                   {blog.title}
                 </h3>
-                <span className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-slate-500 group-hover:text-orange-600">
+                <span className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-slate-500 group-hover:text-[#6678A8]">
                   Read article <FiArrowRight />
                 </span>
               </Link>
@@ -757,11 +1146,11 @@ function Home() {
 
       {/* FINAL ENQUIRY CTA */}
       <section className="px-5 pb-20 sm:px-8 lg:pb-28">
-        <div className="relative mx-auto grid max-w-7xl overflow-hidden rounded-[30px] bg-[#172554] lg:grid-cols-2">
-          <div className="absolute -right-20 -top-28 h-96 w-96 rounded-full bg-orange-500/15 blur-3xl" />
+        <div className="relative mx-auto grid max-w-7xl overflow-hidden rounded-[30px] bg-[#26345C] lg:grid-cols-2">
+          <div className="absolute -right-20 -top-28 h-96 w-96 rounded-full bg-white/15 blur-3xl" />
 
           <div className="relative flex flex-col justify-center p-8 text-white sm:p-12 lg:p-16">
-            <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-orange-300">
+            <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[#AAB5D2]">
               Take the first step
             </p>
             <h2 className="mt-5 text-3xl font-extrabold leading-tight sm:text-5xl">
@@ -771,13 +1160,13 @@ function Home() {
               Tell us about your goals. Our team can help you explore courses
               and understand your next steps.
             </p>
-            <div className="mt-8 flex items-center gap-2 text-sm font-semibold text-orange-300">
+            <div className="mt-8 flex items-center gap-2 text-sm font-semibold text-[#AAB5D2]">
               <FiCheckCircle /> Find a learning path that suits you
             </div>
           </div>
 
           <div className="relative bg-white p-8 sm:p-12 lg:p-14">
-            <h3 className="text-2xl font-extrabold text-[#172554]">
+            <h3 className="text-2xl font-extrabold text-[#26345C]">
               Request a callback
             </h3>
             <p className="mt-2 text-sm text-slate-500">
@@ -795,7 +1184,7 @@ function Home() {
                   value={studentName}
                   onChange={(e) => setStudentName(e.target.value)}
                   placeholder="Enter your full name"
-                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-sm outline-none transition focus:border-orange-400 focus:bg-white"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-sm outline-none transition focus:border-[#8293C8] focus:bg-white"
                 />
               </div>
 
@@ -810,7 +1199,7 @@ function Home() {
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   placeholder="Enter 10-digit mobile number"
-                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-sm outline-none transition focus:border-orange-400 focus:bg-white"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-sm outline-none transition focus:border-[#8293C8] focus:bg-white"
                 />
               </div>
 
@@ -821,7 +1210,7 @@ function Home() {
                 <select
                   value={selectedCourse}
                   onChange={(e) => setSelectedCourse(e.target.value)}
-                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-sm outline-none focus:border-orange-400"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-sm outline-none focus:border-[#8293C8]"
                 >
                   {courses.map((course) => (
                     <option key={course.title} value={course.title}>
@@ -833,7 +1222,7 @@ function Home() {
 
               <button
                 type="submit"
-                className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#F97316] px-5 py-4 text-sm font-extrabold text-white shadow-lg shadow-orange-500/20 transition hover:bg-orange-600"
+                className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#26345C] px-5 py-4 text-sm font-extrabold text-white shadow-lg shadow-[#26345C]/10 transition hover:bg-[#53658F]"
               >
                 Submit Enquiry <FiArrowRight />
               </button>
