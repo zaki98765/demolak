@@ -103,27 +103,24 @@ function CampusAccordion() {
               className="group flex w-full items-center gap-3 py-2 text-left sm:py-2.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#70C7FF]"
             >
               <span
-                className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-lg transition-colors duration-300 ${
-                  isOpen
+                className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-lg transition-colors duration-300 ${isOpen
                     ? "bg-[#1762B5] text-white"
                     : "bg-white/[0.06] text-[#70C7FF] group-hover:bg-white/10"
-                }`}
+                  }`}
               >
                 <FiMapPin size={14} />
               </span>
               <span
-                className={`flex-1 text-[15px] font-semibold transition-colors duration-300 ${
-                  isOpen
+                className={`flex-1 text-[15px] font-semibold transition-colors duration-300 ${isOpen
                     ? "text-white"
                     : "text-[#DCE6F5] group-hover:text-white"
-                }`}
+                  }`}
               >
                 {campus.name}
               </span>
               <FiChevronDown
-                className={`shrink-0 text-[#8EA3C4] transition-transform duration-300 ${
-                  isOpen ? "rotate-180 text-[#70C7FF]" : ""
-                }`}
+                className={`shrink-0 text-[#8EA3C4] transition-transform duration-300 ${isOpen ? "rotate-180 text-[#70C7FF]" : ""
+                  }`}
               />
             </button>
 
@@ -335,7 +332,7 @@ export default function Footer() {
           <p className="col-start-1 row-start-2 sm:col-start-3 sm:row-start-1 sm:text-right">
             Developed by{" "}
             <span className="font-semibold text-[#DCE6F5]">
-              IberrTechnologies
+              BRAND HACKERS
             </span>
           </p>
         </div>
