@@ -1,320 +1,343 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { motion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import {
+  FiArrowUp,
   FiArrowUpRight,
+  FiChevronDown,
+  FiChevronRight,
   FiMapPin,
-  FiPhone,
-  FiMail,
-  FiInstagram,
-  FiFacebook,
-  FiYoutube,
-  FiLinkedin,
-  FiSend,
-  FiCheckCircle,
+  FiNavigation,
 } from "react-icons/fi";
+import {
+  FaApple,
+  FaFacebookF,
+  FaGooglePlay,
+  FaInstagram,
+  FaYoutube,
+} from "react-icons/fa";
+import { campuses } from "../Data/campuses";
 
 /*
-  CATALYST EDUCATION — RESPONSIVE FOOTER
-
-  Brand palette:
-  Primary:      #26345C (soft navy)
-  Accent:       #8293C8 (muted periwinkle)
-  Soft Accent:  #EEF1FA
-  Text:         #414653
-  Background:   #FFFFFF
-
-  Requirements:
-  - Tailwind CSS (no separate stylesheet)
-  - react-router-dom
-  - motion/react
-  - react-icons
+  CATALYST EDUCATION — FOOTER
+  Replace every "#" below with the real social / app-store URLs before launch.
 */
 
-const footerLinks = {
-  explore: [
-    { name: "Home", path: "/" },
-    { name: "About Us", path: "/about" },
-    { name: "Courses", path: "/courses" },
-    { name: "Our Campuses", path: "/campuses" },
-    { name: "Success Stories", path: "/success-stories" },
-    { name: "Life at Campus", path: "/life-at-campus" },
-  ],
-  courses: [
-    { name: "CA Foundation", path: "/courses/ca-foundation" },
-    { name: "CA Intermediate", path: "/courses/ca-intermediate" },
-    { name: "CA Final", path: "/courses/ca-final" },
-    { name: "ACCA", path: "/courses/acca" },
-    { name: "CMA", path: "/courses/cma" },
-  ],
-  campuses: [
-    { name: "Kozhikode", path: "/campuses/kozhikode" },
-    { name: "Malappuram", path: "/campuses/malappuram" },
-    { name: "Kannur", path: "/campuses/kannur" },
-    { name: "Thrissur", path: "/campuses/thrissur" },
-  ],
+const tagline =
+  "India’s leading commerce platform, built to shape a better future.";
+
+const headquarters = {
+  title: "Head Quarters",
+  address: "Happy Tower, Bypass Junction, Mankave, Kozhikode, Kerala 673007",
 };
 
 const socialLinks = [
-  { icon: FiInstagram, label: "Instagram", href: "#" },
-  { icon: FiFacebook, label: "Facebook", href: "#" },
-  { icon: FiYoutube, label: "YouTube", href: "#" },
-  { icon: FiLinkedin, label: "LinkedIn", href: "#" },
+  { label: "Facebook", icon: FaFacebookF, href: "#" },
+  { label: "Instagram", icon: FaInstagram, href: "#" },
+  { label: "YouTube", icon: FaYoutube, href: "#" },
+  { label: "Get it on Google Play", icon: FaGooglePlay, href: "#" },
+  { label: "Download on the App Store", icon: FaApple, href: "#" },
 ];
 
+const quickLinks = [
+  { name: "Home", path: "/" },
+  { name: "About Us", path: "/about-us" },
+  { name: "Blog & Insights", path: "/blogs" },
+  { name: "Campus Gallery", path: "/campus-gallery" },
+  { name: "Contact Support", path: "/contact" },
+];
+
+const courseLinks = [
+  { name: "CMA USA", path: "/courses/cma-usa" },
+  { name: "CMA India", path: "/courses/cma-india" },
+  { name: "ACCA", path: "/courses/acca" },
+  { name: "Chartered Accountant", path: "/courses/ca" },
+  { name: "Company Secretary", path: "/courses/cs" },
+  { name: "Enrolled Agent", path: "/courses/ea" },
+];
+
+const mapsUrl = (query) =>
+  `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
+
+function ColumnTitle({ children }) {
+  return (
+    <h3 className="relative pb-3 text-base font-bold tracking-wide text-white sm:text-lg">
+      {children}
+      <span className="absolute bottom-0 left-0 h-[3px] w-10 rounded-full bg-gradient-to-r from-[#1762B5] to-[#70C7FF]" />
+    </h3>
+  );
+}
+
+function FooterLink({ to, children }) {
+  return (
+    <li>
+      <Link
+        to={to}
+        className="group inline-flex min-h-7 items-center gap-2 rounded text-sm text-[#AFC0DA] transition-colors duration-300 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#70C7FF] sm:text-[15px] lg:whitespace-nowrap lg:text-sm xl:text-[15px]"
+      >
+        <FiChevronRight className="shrink-0 text-xs text-[#70C7FF]/70 transition-transform duration-300 group-hover:translate-x-1 group-hover:text-[#70C7FF]" />
+        <span className="bg-gradient-to-r from-[#70C7FF] to-[#70C7FF] bg-[length:0%_1px] bg-left-bottom bg-no-repeat pb-0.5 transition-[background-size] duration-300 group-hover:bg-[length:100%_1px]">
+          {children}
+        </span>
+      </Link>
+    </li>
+  );
+}
+
+function CampusAccordion() {
+  const [openCampus, setOpenCampus] = useState(null);
+
+  return (
+    <ul className="mt-5 grid gap-x-6 border-t border-white/10 sm:grid-cols-2">
+      {campuses.map((campus) => {
+        const isOpen = openCampus === campus.name;
+        const panelId = `footer-campus-${campus.name.toLowerCase()}`;
+
+        return (
+          <li key={campus.name} className="border-b border-white/10">
+            <button
+              type="button"
+              onClick={() => setOpenCampus(isOpen ? null : campus.name)}
+              aria-expanded={isOpen}
+              aria-controls={panelId}
+              className="group flex w-full items-center gap-3 py-2 text-left sm:py-2.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#70C7FF]"
+            >
+              <span
+                className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-lg transition-colors duration-300 ${
+                  isOpen
+                    ? "bg-[#1762B5] text-white"
+                    : "bg-white/[0.06] text-[#70C7FF] group-hover:bg-white/10"
+                }`}
+              >
+                <FiMapPin size={14} />
+              </span>
+              <span
+                className={`flex-1 text-[15px] font-semibold transition-colors duration-300 ${
+                  isOpen
+                    ? "text-white"
+                    : "text-[#DCE6F5] group-hover:text-white"
+                }`}
+              >
+                {campus.name}
+              </span>
+              <FiChevronDown
+                className={`shrink-0 text-[#8EA3C4] transition-transform duration-300 ${
+                  isOpen ? "rotate-180 text-[#70C7FF]" : ""
+                }`}
+              />
+            </button>
+
+            <AnimatePresence initial={false}>
+              {isOpen && (
+                <motion.div
+                  id={panelId}
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.28, ease: "easeOut" }}
+                  className="overflow-hidden"
+                >
+                  <div className="pb-3 pl-10">
+                    {campus.address && (
+                      <p className="text-sm leading-6 text-[#AFC0DA]">
+                        {campus.address}
+                      </p>
+                    )}
+                    <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs font-semibold">
+                      <Link
+                        to={campus.path}
+                        className="inline-flex items-center gap-1 text-[#70C7FF] transition-colors hover:text-white"
+                      >
+                        View campus <FiArrowUpRight />
+                      </Link>
+                      <a
+                        href={mapsUrl(
+                          `Catalyst Education ${campus.name} ${campus.address}`,
+                        )}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-[#70C7FF] transition-colors hover:text-white"
+                      >
+                        Directions <FiNavigation size={11} />
+                      </a>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
+
 export default function Footer() {
-  const [email, setEmail] = useState("");
-  const [subscribed, setSubscribed] = useState(false);
+  const year = new Date().getFullYear();
 
-  const handleSubscribe = (event) => {
-    event.preventDefault();
-    if (!email.trim()) return;
-
-    // Demo only: connect this form to your newsletter API.
-    setSubscribed(true);
-    setEmail("");
+  const scrollToTop = () => {
+    const reduce = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });
   };
 
   return (
-    <footer className="overflow-hidden bg-white text-[#414653]">
-      {/* Top call-to-action */}
-      <section className="border-b border-[#E8EAF1] bg-gradient-to-r from-[#F7F8FC] via-[#F1F3FA] to-[#F8F9FC]">
-        <div className="mx-auto flex w-full max-w-[1200px] flex-col items-start justify-between gap-6 px-4 py-10 sm:px-6 sm:py-12 md:flex-row md:items-center lg:px-8">
-          <div className="max-w-2xl">
-            <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[#7182B8] sm:text-xs">
-              Take the next step
-            </p>
-            <h2 className="mt-3 text-2xl font-extrabold leading-tight tracking-tight sm:text-3xl md:text-4xl">
-              Your ambition deserves the right guidance.
-            </h2>
-            <p className="mt-3 max-w-xl text-xs leading-6 text-[#697080] sm:text-sm sm:leading-7">
-              Discover your opportunities and start building your future with
-              Catalyst Education.
-            </p>
-          </div>
+    <footer className="relative isolate overflow-hidden bg-[#0B1F3A] text-white">
+      {/* Brand gradient top rule */}
+      <div className="h-[3px] w-full bg-gradient-to-r from-[#10294B] via-[#1762B5] to-[#70C7FF]" />
 
-          <Link
-            to="/contact"
-            className="inline-flex w-full shrink-0 items-center justify-center gap-3 rounded-lg bg-[#26345C] px-6 py-3.5 text-sm font-semibold text-white shadow-sm shadow-[#26345C]/10 transition duration-200 hover:-translate-y-1 hover:bg-[#1762B5] sm:w-auto sm:px-7 sm:py-4"
-          >
-            Talk to Our Team
-            <FiArrowUpRight className="text-lg" />
-          </Link>
-        </div>
-      </section>
+      {/* Background: navy gradient, glow and fine grid */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-[#10294B] via-[#0D2342] to-[#081830]"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -left-40 -top-40 -z-10 h-[460px] w-[460px] rounded-full bg-[#1762B5]/25 blur-[120px]"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -right-32 top-1/3 -z-10 h-[380px] w-[380px] rounded-full bg-[#70C7FF]/10 blur-[120px]"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 -z-10 opacity-[0.07]"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(255,255,255,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.6) 1px, transparent 1px)",
+          backgroundSize: "56px 56px",
+          maskImage:
+            "radial-gradient(ellipse 80% 60% at 50% 0%, #000 20%, transparent 75%)",
+          WebkitMaskImage:
+            "radial-gradient(ellipse 80% 60% at 50% 0%, #000 20%, transparent 75%)",
+        }}
+      />
 
-      {/* Main footer content */}
-      <div className="mx-auto w-full max-w-[1200px] px-4 py-12 sm:px-6 sm:py-14 lg:px-8 lg:py-16">
-        <div className="grid grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-12 lg:gap-x-9 lg:gap-y-12">
-          {/* Brand and social links */}
-          <motion.div
-            initial={{ opacity: 0, y: 18 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.15 }}
-            transition={{ duration: 0.45 }}
-            className="sm:col-span-2 lg:col-span-4"
-          >
+      {/* Main content */}
+      <div className="relative">
+        <div className="mx-auto grid max-w-7xl grid-cols-2 gap-x-8 gap-y-9 px-5 pb-10 pt-12 sm:px-8 lg:grid-cols-12 lg:gap-x-8 lg:pb-14 lg:pt-14">
+          {/* Brand */}
+          <div className="col-span-2 lg:col-span-4">
             <Link
               to="/"
-              className="inline-flex w-[170px] max-w-full items-center rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-[#8293C8] sm:w-[190px]"
+              className="inline-block rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#70C7FF]"
             >
               <img
-                src="/Catalyst_nobg_Logo.png"
+                src="/images/catalyst-logo-white.webp"
                 alt="Catalyst Education"
-                className="h-auto w-full object-contain"
+                width="340"
+                height="112"
+                className="h-12 w-auto sm:h-14"
               />
             </Link>
 
-            <p className="mt-5 max-w-md text-xs leading-7 text-[#697080] sm:mt-6 sm:text-sm">
-              Empowering students through quality education, professional
-              guidance and a learning environment that inspires growth.
+            <p className="mt-4 max-w-sm text-[15px] leading-7 text-[#C9D6EA]">
+              {tagline}
             </p>
 
-            <div className="mt-6 flex flex-wrap items-center gap-2.5 sm:mt-7">
-              {socialLinks.map((social) => {
-                const Icon = social.icon;
-                return (
-                  <a
-                    key={social.label}
-                    href={social.href}
-                    aria-label={social.label}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="flex h-10 w-10 items-center justify-center rounded-lg border border-[#E5E8F0] bg-white text-lg text-[#626A7A] transition duration-200 hover:-translate-y-1 hover:border-[#8293C8] hover:bg-[#8293C8] hover:text-[#26345C] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#8293C8]"
-                  >
-                    <Icon />
-                  </a>
-                );
-              })}
-            </div>
-          </motion.div>
-
-          {/* Explore links */}
-          <div className="lg:col-span-2">
-            <h3 className="text-xs font-extrabold uppercase tracking-[0.15em] text-[#30394F] sm:text-sm">
-              Explore
-            </h3>
-            <ul className="mt-4 space-y-3 sm:mt-6 sm:space-y-4">
-              {footerLinks.explore.map((link) => (
-                <li key={link.name}>
-                  <Link
-                    to={link.path}
-                    className="inline-flex items-center gap-2 text-xs text-[#697080] transition-colors hover:text-[#536795] sm:text-sm"
-                  >
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Course links */}
-          <div className="lg:col-span-2">
-            <h3 className="text-xs font-extrabold uppercase tracking-[0.15em] text-[#30394F] sm:text-sm">
-              Our Courses
-            </h3>
-            <ul className="mt-4 space-y-3 sm:mt-6 sm:space-y-4">
-              {footerLinks.courses.map((link) => (
-                <li key={link.name}>
-                  <Link
-                    to={link.path}
-                    className="text-xs text-[#697080] transition-colors hover:text-[#536795] sm:text-sm"
-                  >
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Contact and campuses */}
-          <div className="sm:col-span-2 lg:col-span-4">
-            <h3 className="text-xs font-extrabold uppercase tracking-[0.15em] text-[#30394F] sm:text-sm">
-              Get in Touch
-            </h3>
-
-            <div className="mt-4 grid gap-4 sm:mt-6 sm:grid-cols-2 lg:grid-cols-1">
-              <a
-                href="tel:+910000000000"
-                className="flex min-w-0 items-start gap-3 text-xs text-[#697080] transition-colors hover:text-[#536795] sm:text-sm"
-              >
-                <FiPhone className="mt-0.5 shrink-0 text-base text-[#7182B8]" />
-                <span className="break-all">+91 00000 00000</span>
-              </a>
-
-              <a
-                href="mailto:info@example.com"
-                className="flex min-w-0 items-start gap-3 text-xs text-[#697080] transition-colors hover:text-[#536795] sm:text-sm"
-              >
-                <FiMail className="mt-0.5 shrink-0 text-base text-[#7182B8]" />
-                <span className="break-all">info@example.com</span>
-              </a>
-
-              <div className="flex min-w-0 items-start gap-3 text-xs leading-6 text-[#697080] sm:text-sm">
-                <FiMapPin className="mt-0.5 shrink-0 text-base text-[#7182B8]" />
-                <span>Kerala, India</span>
+            <div className="mt-5 flex max-w-sm gap-4 rounded-2xl border border-white/10 bg-white/[0.04] p-4 backdrop-blur-sm">
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#1762B5] to-[#70C7FF] text-white shadow-[0_8px_20px_rgba(23,98,181,0.35)]">
+                <FiMapPin size={20} />
+              </span>
+              <div>
+                <h3 className="text-base font-bold text-white">
+                  {headquarters.title}
+                </h3>
+                <address className="mt-1.5 text-sm not-italic leading-6 text-[#AFC0DA]">
+                  {headquarters.address}
+                </address>
+                <a
+                  href={mapsUrl(`Catalyst Education ${headquarters.address}`)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-1 inline-flex min-h-9 items-center gap-1 text-xs font-semibold text-[#70C7FF] transition-colors hover:text-white"
+                >
+                  Get directions <FiArrowUpRight />
+                </a>
               </div>
             </div>
 
-            <h4 className="mt-7 text-xs font-bold text-[#30394F] sm:mt-9 sm:text-sm">
-              Our Campuses
-            </h4>
-            <div className="mt-3 flex flex-wrap gap-2 sm:mt-4">
-              {footerLinks.campuses.map((campus) => (
-                <Link
-                  key={campus.name}
-                  to={campus.path}
-                  className="rounded-md border border-[#E5E8F0] bg-[#F8F9FC] px-3 py-2 text-[10px] text-[#626A7A] transition-colors hover:border-[#8293C8] hover:text-[#536795] sm:text-xs"
-                >
-                  {campus.name}
-                </Link>
+            <ul className="mt-5 flex flex-wrap gap-3">
+              {socialLinks.map(({ label, icon: Icon, href }) => (
+                <li key={label}>
+                  <a
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={label}
+                    title={label}
+                    className="flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-white/[0.04] text-[#DCE6F5] transition-all duration-300 hover:-translate-y-1 hover:border-transparent hover:bg-gradient-to-br hover:from-[#1762B5] hover:to-[#70C7FF] hover:text-white hover:shadow-[0_10px_24px_rgba(23,98,181,0.45)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#70C7FF]"
+                  >
+                    <Icon size={16} />
+                  </a>
+                </li>
               ))}
-            </div>
+            </ul>
+          </div>
+
+          {/* Quick links */}
+          <nav aria-label="Quick links" className="col-span-1 lg:col-span-2">
+            <ColumnTitle>Quick Links</ColumnTitle>
+            <ul className="mt-5 space-y-2.5">
+              {quickLinks.map((link) => (
+                <FooterLink key={link.name} to={link.path}>
+                  {link.name}
+                </FooterLink>
+              ))}
+            </ul>
+          </nav>
+
+          {/* Courses */}
+          <nav aria-label="Our courses" className="col-span-1 lg:col-span-2">
+            <ColumnTitle>Our Courses</ColumnTitle>
+            <ul className="mt-5 space-y-2.5">
+              {courseLinks.map((course) => (
+                <FooterLink key={course.name} to={course.path}>
+                  {course.name}
+                </FooterLink>
+              ))}
+            </ul>
+          </nav>
+
+          {/* Campuses */}
+          <div className="col-span-2 lg:col-span-4">
+            <ColumnTitle>Campuses</ColumnTitle>
+            <CampusAccordion />
           </div>
         </div>
 
-        {/* Newsletter */}
-        <section className="mt-12 rounded-xl border border-[#E8EAF1] bg-[#F7F8FC] p-5 sm:mt-14 sm:p-7 md:mt-16 md:p-8">
-          <div className="grid items-center gap-6 md:grid-cols-2 md:gap-8">
-            <div>
-              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#7182B8] sm:text-xs">
-                Stay connected
-              </p>
-              <h3 className="mt-3 text-xl font-extrabold leading-tight tracking-tight sm:text-2xl">
-                Get updates that move you forward.
-              </h3>
-              <p className="mt-2 max-w-lg text-xs leading-6 text-[#697080] sm:text-sm">
-                Subscribe for course updates, useful resources and educational
-                insights.
-              </p>
-            </div>
-
-            <div className="min-w-0">
-              {subscribed ? (
-                <div
-                  role="status"
-                  className="flex items-center gap-3 rounded-lg border border-[#8293C8]/25 bg-[#8293C8]/10 p-4 text-sm text-[#8CEBFF]"
-                >
-                  <FiCheckCircle className="shrink-0 text-xl" />
-                  Thank you for subscribing!
-                </div>
-              ) : (
-                <form
-                  onSubmit={handleSubscribe}
-                  className="flex min-w-0 flex-col gap-3 sm:flex-row"
-                >
-                  <input
-                    type="email"
-                    required
-                    value={email}
-                    onChange={(event) => setEmail(event.target.value)}
-                    placeholder="Enter your email address"
-                    aria-label="Email address"
-                    className="h-12 min-w-0 flex-1 rounded-lg border border-[#DDE1EB] bg-white px-4 text-xs text-[#30394F] outline-none placeholder:text-[#30394F]/35 focus:border-[#8293C8] focus:ring-2 focus:ring-[#8293C8]/15 sm:text-sm"
-                  />
-                  <button
-                    type="submit"
-                    className="inline-flex h-12 shrink-0 items-center justify-center gap-2 rounded-lg bg-[#8293C8] px-5 text-xs font-extrabold text-[#26345C] transition-colors hover:bg-[#EEF1FA] sm:px-6 sm:text-sm"
-                  >
-                    Subscribe <FiSend />
-                  </button>
-                </form>
-              )}
-              <p className="mt-3 text-[10px] leading-5 text-[#9298A5] sm:text-xs">
-                You can unsubscribe at any time.
-              </p>
-            </div>
-          </div>
-        </section>
+        {/* Oversized watermark wordmark — sits behind the content, adds no height */}
+        <p
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 translate-y-[24%] select-none text-center text-[15vw] font-black uppercase leading-none tracking-tight text-transparent [-webkit-text-stroke:1px_rgba(112,199,255,0.10)] lg:text-[140px]"
+        >
+          Catalyst
+        </p>
       </div>
 
-      {/* Bottom bar */}
-      <div className="border-t border-[#E8EAF1] bg-[#F8F9FC]">
-        <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-4 px-4 py-5 text-center sm:px-6 sm:py-6 md:flex-row md:items-center md:justify-between md:text-left lg:px-8">
-          <p className="m-0 text-[10px] leading-5 text-[#858B98] sm:text-xs">
-            © {new Date().getFullYear()} Catalyst Education. All rights reserved.
+      {/* Bottom bar — right padding on mobile keeps text clear of the floating contact buttons */}
+      <div className="relative border-t border-white/10 bg-[#061327]/80 backdrop-blur">
+        <div className="mx-auto grid max-w-7xl grid-cols-[1fr_auto] items-center gap-x-4 gap-y-1.5 py-4 pl-5 pr-24 text-xs text-[#8EA3C4] sm:grid-cols-[1fr_auto_1fr] sm:px-8 sm:text-sm">
+          <p className="col-start-1 row-start-1">
+            © {year} Catalyst Hub. All Rights Reserved.
           </p>
 
-          <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 md:justify-end">
-            <Link
-              to="/privacy-policy"
-              className="text-[10px] text-[#7B8190] transition-colors hover:text-[#536795] sm:text-xs"
-            >
-              Privacy Policy
-            </Link>
-            <Link
-              to="/terms-and-conditions"
-              className="text-[10px] text-[#7B8190] transition-colors hover:text-[#536795] sm:text-xs"
-            >
-              Terms & Conditions
-            </Link>
-            <Link
-              to="/contact"
-              className="text-[10px] text-[#7B8190] transition-colors hover:text-[#536795] sm:text-xs"
-            >
-              Contact
-            </Link>
-          </div>
+          <button
+            type="button"
+            onClick={scrollToTop}
+            aria-label="Back to top"
+            className="col-start-2 row-span-2 row-start-1 flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-white/[0.04] text-[#DCE6F5] transition-all duration-300 hover:-translate-y-0.5 hover:border-transparent hover:bg-gradient-to-br hover:from-[#1762B5] hover:to-[#70C7FF] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#70C7FF] sm:row-span-1"
+          >
+            <FiArrowUp size={16} />
+          </button>
+
+          <p className="col-start-1 row-start-2 sm:col-start-3 sm:row-start-1 sm:text-right">
+            Developed by{" "}
+            <span className="font-semibold text-[#DCE6F5]">
+              IberrTechnologies
+            </span>
+          </p>
         </div>
       </div>
     </footer>

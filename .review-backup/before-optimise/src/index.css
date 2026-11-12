@@ -1,0 +1,175 @@
+@import "tailwindcss";
+
+.course-marquee {
+  width: 100%;
+  overflow: hidden;
+}
+
+.course-track {
+  width: max-content;
+  animation: course-marquee 45s linear infinite;
+  will-change: transform;
+}
+
+.course-marquee:has(.course-card:hover) .course-track {
+  animation-play-state: paused;
+}
+
+.course-card {
+  transform-origin: center center;
+  transition: box-shadow 300ms ease, border-color 300ms ease;
+}
+
+@keyframes course-marquee {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .course-track {
+    animation: none;
+  }
+}
+
+/* Employer logo wall */
+.logo-marquee {
+  overflow: hidden;
+  mask-image: linear-gradient(to right, transparent, #000 10%, #000 90%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 10%, #000 90%, transparent);
+}
+
+.logo-track {
+  width: max-content;
+  animation: logo-marquee var(--duration, 40s) linear infinite;
+  will-change: transform;
+}
+
+.logo-track[data-direction="reverse"] {
+  animation-direction: reverse;
+}
+
+.logo-marquee:hover .logo-track {
+  animation-play-state: paused;
+}
+
+@keyframes logo-marquee {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .logo-track {
+    animation: none;
+  }
+}
+
+/* Google reviews stream — cards glide in from the right */
+.review-marquee {
+  overflow: hidden;
+  mask-image: linear-gradient(to right, #000 85%, transparent);
+  -webkit-mask-image: linear-gradient(to right, #000 85%, transparent);
+}
+
+/* Desktop: cards also fade as they slip under the summary box */
+@media (min-width: 1024px) {
+  .review-marquee {
+    mask-image: linear-gradient(to right, transparent, #000 14%, #000 88%, transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 14%, #000 88%, transparent);
+  }
+}
+
+.review-track {
+  width: max-content;
+  animation: logo-marquee var(--duration, 50s) linear infinite;
+  will-change: transform;
+}
+
+.review-marquee:hover .review-track,
+.review-marquee:focus-within .review-track {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .review-marquee {
+    overflow-x: auto;
+    mask-image: none;
+    -webkit-mask-image: none;
+  }
+
+  .review-track {
+    animation: none;
+  }
+}
+
+/* Floating contact buttons */
+@keyframes fab-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.9);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes fab-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.45;
+  }
+
+  70%,
+  100% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+
+/* Success-story videos — right → left stream */
+.video-marquee {
+  overflow: hidden;
+  mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+}
+
+.video-track {
+  width: max-content;
+  animation: logo-marquee var(--duration, 48s) linear infinite;
+  will-change: transform;
+}
+
+.video-marquee:hover .video-track,
+.video-marquee:focus-within .video-track {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .video-marquee {
+    overflow-x: auto;
+    mask-image: none;
+    -webkit-mask-image: none;
+  }
+
+  .video-track {
+    animation: none;
+  }
+}
+
+/* Learn-on-YouTube panel — rotating border light */
+@keyframes yt-border-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

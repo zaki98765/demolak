@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
   motion,
@@ -28,6 +28,20 @@ export default function CatalystNavbar() {
   useMotionValueEvent(scrollY, "change", (latest) => {
     setScrolled(latest > 80);
   });
+
+  // Mobile menu: close on Escape and when switching to desktop width
+  useEffect(() => {
+    if (!mobileOpen) return undefined;
+    const onKey = (e) => e.key === "Escape" && setMobileOpen(false);
+    const mql = window.matchMedia("(min-width: 1024px)");
+    const onResize = () => mql.matches && setMobileOpen(false);
+    window.addEventListener("keydown", onKey);
+    mql.addEventListener("change", onResize);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      mql.removeEventListener("change", onResize);
+    };
+  }, [mobileOpen]);
 
   const glassStyle = {
     background:
@@ -72,9 +86,12 @@ export default function CatalystNavbar() {
               className="relative z-20 flex shrink-0 items-center"
             >
               <img
-                src="/Catalyst_nobg_Logo.png"
+                src="/images/catalyst-logo.webp"
                 alt="Catalyst Education"
-                className="h-11 w-auto max-w-[155px] object-contain"
+                width="291"
+                height="96"
+                fetchPriority="high"
+                className="h-10 w-auto max-w-[150px] object-contain sm:h-11"
               />
             </Link>
 
