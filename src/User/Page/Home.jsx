@@ -1,10 +1,9 @@
 
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "motion/react";
 import {
   FiArrowRight,
-
   FiGlobe,
   FiArrowUpRight,
   FiBookOpen,
@@ -17,8 +16,13 @@ import {
   FiTrendingUp,
   FiBriefcase,
   FiTarget,
-
+  FiClock,
+  FiDownload,
+  FiSend,
 } from "react-icons/fi";
+
+
+
 
 
 const fadeUp = {
@@ -81,62 +85,82 @@ function SectionHeading({ eyebrow, title, description, center = false }) {
   );
 }
 
+
 const courses = [
   {
     title: "CMA USA",
-    category: "GLOBAL MANAGEMENT ACCOUNTING",
-    description: "Build expertise in management accounting, financial planning and strategic decision-making.",
-    duration: "Approx. 1 Year",
-    image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=900",
+    category: "GLOBAL PROFESSIONAL QUALIFICATION",
+    duration: "1 Year",
+    eligibility: "+2 / Degree",
+    description:
+      "As the best CMA USA institute in India, our CMA USA course focuses on management accounting, financial strategy and industry-relevant skills. With expert mentoring and structured learning, we prepare students for global career opportunities.",
+    tag: "GLOBAL QUALIFICATION",
+    image: "/images/cma-usa.jpg",
     path: "/courses/cma-usa",
-    tag: "Global Qualification",
-  },
-  {
-    title: "CMA India",
-    category: "COST & MANAGEMENT ACCOUNTING",
-    description: "Develop professional skills in cost accounting, financial management and business strategy.",
-    duration: "As per course pathway",
-    image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=900",
-    path: "/courses/cma-india",
-    tag: "Professional",
+    brochure: "/brochures/cma-usa.pdf",
   },
   {
     title: "ACCA",
-    category: "GLOBAL ACCOUNTING",
-    description: "Prepare for an internationally recognised qualification in accounting, audit and finance.",
-    duration: "Flexible pathway",
-    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=900",
+    category: "GLOBAL PROFESSIONAL QUALIFICATION",
+    duration: "3 Years",
+    eligibility: "+2 / Degree",
+    description:
+      "Our ACCA programme offers structured coaching with expert faculty, exam-focused training and practical learning to prepare students for global accounting careers.",
+    tag: "INTERNATIONAL QUALIFICATION",
+    image: "/images/acca.jpg",
     path: "/courses/acca",
-    tag: "Global Career",
+    brochure: "/brochures/acca.pdf",
   },
   {
-    title: "Chartered Accountancy",
-    category: "CHARTERED ACCOUNTANCY",
-    description: "Work towards a career in auditing, taxation, accounting and financial advisory.",
-    duration: "As per ICAI pathway",
-    image: "https://images.unsplash.com/photo-1553877522-43269d4ea984?w=900",
+    title: "CMA India",
+    category: "INDIAN PROFESSIONAL QUALIFICATION",
+    duration: "3 Years",
+    eligibility: "+2 / Degree",
+    description:
+      "Our CMA India course provides concept-based teaching, regular assessments and practical exposure to help students build strong careers in Indian corporates and beyond.",
+    tag: "INDIAN QUALIFICATION",
+    image: "/images/cma-india.jpg",
+    path: "/courses/cma-india",
+    brochure: "/brochures/cma-india.pdf",
+  },
+  {
+    title: "Chartered Accountant",
+    category: "INDIAN PROFESSIONAL QUALIFICATION",
+    duration: "3 Years",
+    eligibility: "+2 / Degree",
+    description:
+      "Our CA programme offers exam-focused coaching and academic support to develop successful careers in accounting, taxation and finance.",
+    tag: "PROFESSIONAL QUALIFICATION",
+    image: "/images/ca.jpg",
     path: "/courses/ca",
-    tag: "Career Focused",
+    brochure: "/brochures/ca.pdf",
   },
   {
     title: "Company Secretary",
-    category: "CORPORATE GOVERNANCE",
-    description: "Study corporate law, governance, compliance and strategic management.",
-    duration: "As per ICSI pathway",
-    image: "https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=900",
+    category: "INDIAN PROFESSIONAL QUALIFICATION",
+    duration: "3 Years",
+    eligibility: "+2 / Degree",
+    description:
+      "The CS course prepares students for careers in corporate law and governance through expert guidance and structured professional learning.",
+    tag: "CORPORATE CAREER",
+    image: "/images/cs.jpg",
     path: "/courses/cs",
-    tag: "Professional",
+    brochure: "/brochures/cs.pdf",
   },
   {
     title: "Enrolled Agent",
-    category: "US TAXATION",
-    description: "Prepare for the US tax credential focused on taxation and representation before the IRS.",
-    duration: "Flexible pathway",
-    image: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=900",
+    category: "US PROFESSIONAL QUALIFICATION",
+    duration: "1 Year",
+    eligibility: "+2 / Degree",
+    description:
+      "Our EA programme prepares students for US taxation careers through structured training, practical understanding and expert academic guidance.",
+    tag: "US TAXATION",
+    image: "/images/ea.jpg",
     path: "/courses/ea",
-    tag: "Specialist Path",
+    brochure: "/brochures/ea.pdf",
   },
 ];
+
 
 const features = [
   {
@@ -294,14 +318,18 @@ function Home() {
   const [activeHero, setActiveHero] = useState(0);
   const currentHero = heroSlides[activeHero];
   const HeroFeatureIcon = currentHero.icon;
+  const prefersReducedMotion = useReducedMotion();
+  const [isHeroPaused, setIsHeroPaused] = useState(false);
 
   useEffect(() => {
+    if (prefersReducedMotion || isHeroPaused) return undefined;
+
     const timer = window.setInterval(() => {
       setActiveHero((current) => (current + 1) % heroSlides.length);
     }, 6000);
 
     return () => window.clearInterval(timer);
-  }, []);
+  }, [prefersReducedMotion, isHeroPaused]);
 
   const nextHero = () => {
     setActiveHero((current) => (current + 1) % heroSlides.length);
@@ -310,8 +338,7 @@ function Home() {
   const prevHero = () => {
     setActiveHero((current) => (current - 1 + heroSlides.length) % heroSlides.length);
   };
-
-  const [selectedCourse, setSelectedCourse] = useState("CA Foundation");
+  const [selectedCourse, setSelectedCourse] = useState(courses[0].title);
   const [studentName, setStudentName] = useState("");
   const [phone, setPhone] = useState("");
 
@@ -325,12 +352,19 @@ function Home() {
     <div className="overflow-hidden bg-white">
 
       {/* HERO CAROUSEL */}
+
       <section className="relative overflow-hidden bg-white pb-12 pt-28 sm:pt-32 lg:pb-16 lg:pt-36">
         <div className="mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-12">
 
 
           {/* HERO CAROUSEL */}
-          <div className="relative overflow-hidden rounded-[28px] bg-[#10294B] shadow-[0_25px_70px_rgba(25,55,100,0.13)] sm:rounded-[36px]">
+          <div
+            className="relative overflow-hidden rounded-[28px] bg-[#10294B] shadow-[0_25px_70px_rgba(25,55,100,0.13)] sm:rounded-[36px]"
+            onMouseEnter={() => setIsHeroPaused(true)}
+            onMouseLeave={() => setIsHeroPaused(false)}
+            onFocus={() => setIsHeroPaused(true)}
+            onBlur={() => setIsHeroPaused(false)}
+          >
 
 
 
@@ -449,7 +483,7 @@ function Home() {
                   </div>
 
                   <span className="text-xs font-bold tracking-widest text-white/40">
-                    03
+                    {String(heroSlides.length).padStart(2, "0")}
                   </span>
                 </div>
               </div>
@@ -599,11 +633,7 @@ function Home() {
       </section>
 
 
-
-
       {/* ------------------------------------------------------------------------------ */}
-
-
 
 
       {/* CATALYST AT A GLANCE */}
@@ -653,14 +683,13 @@ function Home() {
                 label: "PLACEMENT SUPPORT",
                 icon: FiBriefcase,
               },
-            ].map((item, index) => {
+            ].map((item) => {
               const Icon = item.icon;
 
               return (
                 <Reveal key={item.label}>
                   <div
-                    style={{ transitionDelay: `${index * 120}ms` }}
-                    className="group relative h-full overflow-hidden rounded-[28px] border border-[#E7EDF5] bg-white/75 p-8 text-center shadow-[0_12px_45px_rgba(38,52,92,0.06)] backdrop-blur-2xl transition-all duration-700 hover:-translate-y-2 hover:border-[#B9DFFF] hover:shadow-[0_20px_55px_rgba(23,98,181,0.12)]"
+                    className="group relative h-full overflow-hidden rounded-[28px] border border-[#E7EDF5] bg-white/75 p-8 text-center shadow-[0_12px_45px_rgba(38,52,92,0.06)] backdrop-blur-2xl transition-all duration-300 hover:-translate-y-2 hover:border-[#B9DFFF] hover:shadow-[0_20px_55px_rgba(23,98,181,0.12)]"
                   >
                     {/* Liquid glass highlight */}
                     <div className="pointer-events-none absolute -right-12 -top-16 h-36 w-36 rounded-full bg-[#DCEEFF]/50 blur-3xl transition-all duration-500 group-hover:bg-[#B8DDFF]/70" />
@@ -694,116 +723,186 @@ function Home() {
       </section>
 
 
+      {/* COURSES - INFINITE AUTO SCROLL CAROUSEL */}
+      <section className="relative overflow-hidden bg-[#F7F9FD] py-20 lg:py-28">
 
-
-
-      {/* COURSES - INFINITE MOVING CAROUSEL */}
-      <section className="overflow-hidden bg-white py-20  lg:py-28">
+        {/* Background decoration */}
+        <div className="pointer-events-none absolute -left-40 top-20 h-80 w-80 rounded-full bg-[#70C7FF]/10 blur-3xl" />
+        <div className="pointer-events-none absolute -right-40 bottom-10 h-96 w-96 rounded-full bg-[#1762B5]/10 blur-3xl" />
 
         {/* Section heading */}
-        <div className="mx-auto max-w-7xl px-5 sm:px-8">
+        <div className="relative z-10 mx-auto mb-14 max-w-7xl px-5 sm:px-8">
+
           <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
-            <SectionHeading
-              eyebrow="Explore our programmes"
-              title="Find the right course for your future."
-              description="Discover professional commerce programmes and choose the learning path that matches your ambitions."
-            />
+
+            <div>
+              <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#1762B5]/15 bg-white px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-[#1762B5] shadow-sm">
+                <span className="h-2 w-2 rounded-full bg-[#1762B5]" />
+                Explore our programmes
+              </span>
+
+              <h2 className="max-w-2xl text-3xl font-extrabold leading-tight text-[#10294B] sm:text-4xl lg:text-5xl">
+                Find the right course for
+                <span className="text-[#1762B5]"> your future</span>
+              </h2>
+
+              <p className="mt-4 max-w-xl text-sm leading-7 text-[#52617D] sm:text-base">
+                Discover industry-focused programmes designed to build your
+                skills, strengthen your knowledge and prepare you for your career.
+              </p>
+            </div>
 
             <Link
               to="/courses"
-              className="inline-flex shrink-0 items-center gap-2 text-sm font-bold text-[#6678A8] transition hover:text-[#26345C]"
+              className="group inline-flex w-fit items-center gap-3 rounded-full border border-[#1762B5]/20 bg-white px-6 py-3 text-sm font-bold text-[#1762B5] shadow-sm transition-all duration-300 hover:border-[#1762B5] hover:bg-[#1762B5] hover:text-white"
             >
               View all courses
-              <FiArrowUpRight />
+              <FiArrowRight className="transition-transform duration-300 group-hover:translate-x-1" />
             </Link>
+
           </div>
         </div>
 
+
         {/* Carousel */}
-        <div className="relative mt-12 overflow-hidden">
+        <div className="relative z-10">
 
-          {/* Left blur / fade */}
-          <div className="pointer-events-none absolute inset-y-0 left-0 z-20 w-16 bg-gradient-to-r from-white via-white/90 to-transparent sm:w-28 lg:w-40" />
+          {/* Side fades */}
+          <div className="pointer-events-none absolute bottom-0 left-0 top-0 z-20 w-12 bg-gradient-to-r from-[#F7F9FD] to-transparent sm:w-24" />
+
+          <div className="pointer-events-none absolute bottom-0 right-0 top-0 z-20 w-12 bg-gradient-to-l from-[#F7F9FD] to-transparent sm:w-24" />
+
+          {/* Extra vertical space prevents hover clipping */}
+          <div className="course-marquee py-5">
+
+            <div className="course-track flex w-max">
+
+              {[0, 1].map((group) => (
+                <div
+                  key={group}
+                  className="flex shrink-0 gap-6 pr-6"
+                  aria-hidden={group === 1 ? true : undefined}
+                >
+
+                  {courses.map((course, index) => (
 
 
-          {/* Moving cards */}
-          <motion.div
-            className="flex w-max gap-6"
-            animate={{
-              x: ["0%", "-50%"],
-            }}
-            transition={{
-              duration: 35,
-              ease: "linear",
-              repeat: Infinity,
-            }}
-          >
-            {[...courses, ...courses].map((course, index) => (
-              <motion.div
-                key={`${course.title}-${index}`}
-                whileHover={{
-                  y: -8,
-                  scale: 1.015,
-                }}
-                className="group w-[280px] shrink-0 overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm transition-shadow duration-300 hover:shadow-xl sm:w-[320px]"
-              >
-
-                {/* Course image */}
-                <div className="relative h-48 overflow-hidden">
-                  <img
-                    src={course.image}
-                    alt={course.title}
-                    loading="lazy"
-                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
-                  />
-
-                  <span className="absolute left-4 top-4 rounded-full border border-white/70 bg-white/90 px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-wide text-[#6678A8] shadow-sm backdrop-blur-md">
-                    {course.tag}
-                  </span>
-                </div>
-
-                {/* Course details */}
-                <div className="p-5">
-
-                  <p className="text-[10px] font-extrabold tracking-[0.12em] text-[#8293C8]">
-                    {course.category}
-                  </p>
-
-                  <h3 className="mt-3 text-xl font-extrabold text-[#26345C]">
-                    {course.title}
-                  </h3>
-
-                  <p className="mt-3 min-h-[72px] text-sm leading-6 text-slate-500">
-                    {course.description}
-                  </p>
-
-                  {/* Card footer */}
-                  <div className="mt-5 flex items-center justify-between border-t border-slate-100 pt-4">
-
-                    <span className="text-xs font-semibold text-slate-500">
-                      {course.duration}
-                    </span>
-
-                    <Link
-                      to={course.path}
-                      aria-label={`Explore ${course.title}`}
-                      className="flex h-9 w-9 items-center justify-center rounded-full bg-[#F1F3F9] text-[#6678A8] transition-all duration-300 hover:bg-[#6678A8] hover:text-white"
+                    <motion.div
+                      key={`${group}-${course.title}-${index}`}
+                      className="course-card group relative flex h-[450px] w-[290px] shrink-0 flex-col overflow-hidden rounded-[24px] border border-[#E2EAF5] bg-gradient-to-br from-white to-[#F0F7FF] p-5 shadow-[0_8px_30px_rgba(16,41,75,0.06)] sm:w-[320px]"
+                      whileHover={{
+                        y: -8,
+                        scale: 1.025,
+                        boxShadow: "0px 20px 45px rgba(23,98,181,0.16)",
+                        borderColor: "rgba(23,98,181,0.45)",
+                      }}
+                      transition={{ type: "spring", stiffness: 260, damping: 22 }}
                     >
-                      <FiArrowUpRight />
-                    </Link>
+                      {/* Top accent */}
+                      <div className="absolute left-0 right-0 top-0 h-1 bg-gradient-to-r from-[#10294B] via-[#1762B5] to-[#70C7FF]" />
 
-                  </div>
+                      {/* Category */}
+                      <div className="mb-5 flex shrink-0 items-center justify-between">
+                        <span className="rounded-full bg-[#EAF3FF] px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-[#1762B5]">
+                          {course.category}
+                        </span>
+
+                        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#EAF3FF] text-lg text-[#1762B5] transition-all duration-300 group-hover:bg-[#1762B5] group-hover:text-white">
+                          <FiBookOpen />
+                        </div>
+                      </div>
+
+                      {/* Title */}
+                      <div className="h-[56px] shrink-0">
+                        <h3 className="line-clamp-2 text-lg font-extrabold leading-7 text-[#10294B] transition-colors group-hover:text-[#1762B5]">
+                          {course.title}
+                        </h3>
+                      </div>
+
+                      {/* Description */}
+                      <div className="mt-2 h-[66px] shrink-0 overflow-hidden">
+                        <p className="line-clamp-3 text-[13px] leading-[22px] text-[#52617D]">
+                          {course.description}
+                        </p>
+                      </div>
+
+                      {/* Course details */}
+                      <div className="mt-4 shrink-0 space-y-2.5 border-t border-[#E2EAF5] pt-4">
+
+                        <div className="flex min-h-8 items-center gap-3 text-[13px] text-[#52617D]">
+                          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#EAF3FF] text-[#1762B5]">
+                            <FiClock />
+                          </span>
+                          <span>
+                            <span className="font-semibold text-[#10294B]">Duration:</span>{" "}
+                            {course.duration}
+                          </span>
+                        </div>
+
+                        <div className="flex min-h-8 items-center gap-3 text-[13px] text-[#52617D]">
+                          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#EAF3FF] text-[#1762B5]">
+                            <FiBookOpen />
+                          </span>
+                          <span>
+                            <span className="font-semibold text-[#10294B]">Eligibility:</span>{" "}
+                            {course.eligibility}
+                          </span>
+                        </div>
+
+                      </div>
+
+                      {/* Buttons */}
+                      <div className="mt-auto shrink-0 pt-4">
+
+                        <Link
+                          to={course.path}
+                          tabIndex={group === 1 ? -1 : undefined}
+                          className="group/btn flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#10294B] to-[#1762B5] text-sm font-bold text-white shadow-md transition-all duration-300 hover:shadow-lg"
+                        >
+                          Learn More
+                          <FiArrowRight className="transition-transform group-hover/btn:translate-x-1" />
+                        </Link>
+
+                        <div className="mt-2.5 grid grid-cols-2 gap-2.5">
+                          <a
+                            href={course.brochure}
+                            download
+                            tabIndex={group === 1 ? -1 : undefined}
+                            className="flex h-10 items-center justify-center gap-2 rounded-xl border border-[#DCE7F5] bg-white text-xs font-bold text-[#1762B5] transition-colors hover:bg-[#EAF3FF]"
+                          >
+                            <FiDownload />
+                            Brochure
+                          </a>
+
+                          <Link
+                            to="/enquiry"
+                            tabIndex={group === 1 ? -1 : undefined}
+                            className="flex h-10 items-center justify-center gap-2 rounded-xl border border-[#DCE7F5] bg-white text-xs font-bold text-[#10294B] transition-colors hover:bg-[#EAF3FF] hover:text-[#1762B5]"
+                          >
+                            <FiSend />
+                            Apply Now
+                          </Link>
+                        </div>
+
+                      </div>
+
+                      {/* Bottom accent */}
+                      <div className="absolute bottom-0 left-0 h-1 w-0 bg-gradient-to-r from-[#1762B5] to-[#70C7FF] transition-all duration-500 group-hover:w-full" />
+
+                    </motion.div>
+
+
+                  ))}
+
                 </div>
-              </motion.div>
-            ))}
-          </motion.div>
+              ))}
 
-          {/* Right blur / fade */}
-          <div className="pointer-events-none absolute inset-y-0 right-0 z-20 w-16 bg-gradient-to-l from-white via-white/90 to-transparent sm:w-28 lg:w-40" />
-
+            </div>
+          </div>
         </div>
-      </section>
 
+
+      </section>
 
 
       {/* WHY CATALYST */}
@@ -933,7 +1032,7 @@ function Home() {
 
           {/* Moving cards */}
           <motion.div
-            className="flex w-max gap-6"
+            className="flex w-max"
             animate={{ x: ["0%", "-50%"] }}
             transition={{
               duration: 40,
@@ -946,11 +1045,13 @@ function Home() {
               <motion.div
                 key={`${campus.name}-${index}`}
                 whileHover={{ y: -8, scale: 1.015 }}
-                className="group relative h-[330px] w-[280px] shrink-0 overflow-hidden rounded-2xl shadow-sm transition-shadow duration-300 hover:shadow-xl sm:h-[370px] sm:w-[340px]"
+                aria-hidden={index >= campuses.length ? true : undefined}
+                className="group relative mr-6 h-[330px] w-[280px] shrink-0 overflow-hidden rounded-2xl shadow-sm transition-shadow duration-300 hover:shadow-xl sm:h-[370px] sm:w-[340px]"
               >
 
                 <Link
                   to={campus.path}
+                  tabIndex={index >= campuses.length ? -1 : undefined}
                   className="absolute inset-0 block"
                   aria-label={`Explore ${campus.name} campus`}
                 >
@@ -1023,12 +1124,12 @@ function Home() {
               </p>
               <div className="relative mt-9 overflow-hidden">
                 <motion.div
-                  className="flex w-max items-center gap-14 py-3"
+                  className="flex w-max items-center py-3"
                   animate={{ x: ["0%", "-50%"] }}
                   transition={{ duration: 24, ease: "linear", repeat: Infinity }}
                 >
                   {[...employers, ...employers].map((employer, index) => (
-                    <div key={`${employer}-${index}`} className="min-w-[120px] text-center text-xl font-extrabold tracking-tight text-slate-400 transition hover:text-[#26345C] sm:text-2xl">
+                    <div key={`${employer}-${index}`} aria-hidden={index >= employers.length ? true : undefined} className="mr-14 min-w-[120px] text-center text-xl font-extrabold tracking-tight text-slate-400 transition hover:text-[#26345C] sm:text-2xl">
                       {employer}
                     </div>
                   ))}
@@ -1175,42 +1276,48 @@ function Home() {
 
             <form onSubmit={handleEnquiry} className="mt-7 space-y-5">
               <div>
-                <label className="mb-2 block text-xs font-bold text-slate-600">
+                <label htmlFor="enquiry-name" className="mb-2 block text-xs font-bold text-slate-600">
                   Your name
                 </label>
                 <input
+                  id="enquiry-name"
                   type="text"
                   required
+                  autoComplete="name"
                   value={studentName}
                   onChange={(e) => setStudentName(e.target.value)}
                   placeholder="Enter your full name"
-                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-sm outline-none transition focus:border-[#8293C8] focus:bg-white"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-sm outline-none transition focus:border-[#1762B5] focus:bg-white focus-visible:ring-2 focus-visible:ring-[#1762B5]/25"
                 />
               </div>
 
               <div>
-                <label className="mb-2 block text-xs font-bold text-slate-600">
+                <label htmlFor="enquiry-phone" className="mb-2 block text-xs font-bold text-slate-600">
                   Phone number
                 </label>
                 <input
+                  id="enquiry-phone"
                   type="tel"
                   required
+                  autoComplete="tel"
+                  inputMode="numeric"
                   pattern="[0-9]{10}"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   placeholder="Enter 10-digit mobile number"
-                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-sm outline-none transition focus:border-[#8293C8] focus:bg-white"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-sm outline-none transition focus:border-[#1762B5] focus:bg-white focus-visible:ring-2 focus-visible:ring-[#1762B5]/25"
                 />
               </div>
 
               <div>
-                <label className="mb-2 block text-xs font-bold text-slate-600">
+                <label htmlFor="enquiry-course" className="mb-2 block text-xs font-bold text-slate-600">
                   Interested course
                 </label>
                 <select
+                  id="enquiry-course"
                   value={selectedCourse}
                   onChange={(e) => setSelectedCourse(e.target.value)}
-                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-sm outline-none focus:border-[#8293C8]"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-sm outline-none focus:border-[#1762B5] focus-visible:ring-2 focus-visible:ring-[#1762B5]/25"
                 >
                   {courses.map((course) => (
                     <option key={course.title} value={course.title}>

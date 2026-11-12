@@ -1,0 +1,36 @@
+
+.course-marquee {
+  width: 100%;
+  overflow: hidden;
+}
+
+.course-track {
+  width: max-content;
+  animation: course-marquee 45s linear infinite;
+  will-change: transform;
+}
+
+.course-marquee:has(.course-card:hover) .course-track {
+  animation-play-state: paused;
+}
+
+.course-card {
+  transform-origin: center center;
+  transition: box-shadow 300ms ease, border-color 300ms ease;
+}
+
+@keyframes course-marquee {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .course-track {
+    animation: none;
+  }
+}

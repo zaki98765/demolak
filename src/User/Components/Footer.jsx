@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import {
   FiArrowUpRight,
   FiMapPin,
@@ -27,7 +27,7 @@ import {
   Requirements:
   - Tailwind CSS (no separate stylesheet)
   - react-router-dom
-  - framer-motion
+  - motion/react
   - react-icons
 */
 
@@ -95,7 +95,7 @@ export default function Footer() {
 
           <Link
             to="/contact"
-            className="inline-flex w-full shrink-0 items-center justify-center gap-3 rounded-lg bg-[#26345C] px-6 py-3.5 text-sm font-semibold text-white shadow-sm shadow-[#26345C]/10 transition duration-200 hover:-translate-y-1 hover:bg-[#EEF1FA] sm:w-auto sm:px-7 sm:py-4"
+            className="inline-flex w-full shrink-0 items-center justify-center gap-3 rounded-lg bg-[#26345C] px-6 py-3.5 text-sm font-semibold text-white shadow-sm shadow-[#26345C]/10 transition duration-200 hover:-translate-y-1 hover:bg-[#1762B5] sm:w-auto sm:px-7 sm:py-4"
           >
             Talk to Our Team
             <FiArrowUpRight className="text-lg" />
