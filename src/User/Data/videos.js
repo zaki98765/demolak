@@ -10,19 +10,16 @@ export const successVideos = [
   {
     id: "DLABdksYp0Y",
     label: "Danish's success story",
-    tag: "Latest",
     title: "ഒരു DANISH വിജയം 🔥",
   },
   {
     id: "XwdHDVQArag",
     label: "Why choose ACCA?",
-    tag: "Latest",
     title: "ACCA ആശകൾ ആയിരം 💼✨ | Why Choose ACCA? | Catalyst Education 🎓",
   },
   {
     id: "jb655VidJ70",
     label: "Fathima's CMA journey",
-    tag: "Latest",
     title: "Fathima നേറ്റെ CMA സ്വപ്നങ്ങൾ ✨ | Fathima's Catalyst Journey",
   },
   {

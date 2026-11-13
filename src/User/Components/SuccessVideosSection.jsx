@@ -47,9 +47,11 @@ function VideoCard({ video, onPlay, hidden }) {
           <span className="absolute inset-0 flex items-center justify-center transition-transform duration-500 group-hover:scale-110">
             <PlayBadge />
           </span>
-          <span className="absolute left-3 top-3 rounded-full bg-white/90 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#1762B5] backdrop-blur">
-            {video.tag}
-          </span>
+          {video.tag && (
+            <span className="absolute left-3 top-3 rounded-full bg-white/90 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#1762B5] backdrop-blur">
+              {video.tag}
+            </span>
+          )}
         </span>
         <span className="flex items-center justify-between gap-3 px-2 pb-1.5 pt-4">
           <span className="line-clamp-2 min-h-[2.6rem] text-[15px] font-extrabold leading-snug text-[#10294B] transition-colors duration-300 group-hover:text-[#1762B5]">
