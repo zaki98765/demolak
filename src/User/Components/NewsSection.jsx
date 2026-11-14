@@ -66,7 +66,7 @@ function NewsCard({ item, index, total }) {
               <FiCalendar size={13} /> {item.date}
             </p>
           )}
-          <span className="block h-[3px] w-10 rounded-full bg-gradient-to-r from-[#1762B5] to-[#70C7FF] transition-all duration-500 group-hover:w-24" />
+          <span className="block h-[3px] w-10 rounded-full bg-gradient-to-r from-[#1762B5] to-[#70C7FF] transition-[color,background-color,border-color,box-shadow,opacity,translate,scale,rotate,width,background-position] duration-500 group-hover:w-24" />
         </div>
       </div>
     </article>

@@ -52,7 +52,7 @@ function FaqItem({ faq, index, isOpen, onToggle }) {
           </span>
           <span
             aria-hidden="true"
-            className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition-all duration-300 ${
+            className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition-[color,background-color,border-color,box-shadow,opacity,translate,scale,rotate,width,background-position] duration-300 ${
               isOpen
                 ? "rotate-45 bg-[#1762B5] text-white shadow-[0_8px_20px_rgba(23,98,181,0.3)]"
                 : "bg-[#EAF3FF] text-[#1762B5] group-hover:bg-[#DCEBFF]"

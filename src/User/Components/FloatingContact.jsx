@@ -49,7 +49,7 @@ export default function FloatingContact() {
           href={href}
           {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
           aria-label={`${label}${key === "call" ? ` ${sublabel}` : ""}`}
-          className={`group relative isolate flex h-12 w-12 items-center justify-center rounded-full text-white ring-4 ring-white/70 transition-all duration-300 ease-out hover:-translate-y-1 hover:scale-105 focus-visible:outline-none focus-visible:ring-4 sm:h-14 sm:w-14 motion-reduce:hover:translate-y-0 motion-reduce:hover:scale-100 ${button}`}
+          className={`group relative isolate flex h-12 w-12 items-center justify-center rounded-full text-white ring-4 ring-white/70 transition-[color,background-color,border-color,box-shadow,opacity,translate,scale,rotate,width,background-position] duration-300 ease-out hover:-translate-y-1 hover:scale-105 focus-visible:outline-none focus-visible:ring-4 sm:h-14 sm:w-14 motion-reduce:hover:translate-y-0 motion-reduce:hover:scale-100 ${button}`}
         >
           {/* Soft attention pulse (WhatsApp only, off for reduced motion) */}
           {pulse && (
@@ -64,7 +64,7 @@ export default function FloatingContact() {
           {/* Label slides out on hover / keyboard focus (desktop) */}
           <span
             aria-hidden="true"
-            className="pointer-events-none absolute right-[calc(100%+14px)] top-1/2 hidden -translate-y-1/2 translate-x-2 whitespace-nowrap rounded-2xl border border-[#E2EAF5] bg-white px-4 py-2.5 text-left opacity-0 shadow-[0_12px_30px_rgba(16,41,75,0.16)] transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100 group-focus-visible:translate-x-0 group-focus-visible:opacity-100 sm:block"
+            className="pointer-events-none absolute right-[calc(100%+14px)] top-1/2 hidden -translate-y-1/2 translate-x-2 whitespace-nowrap rounded-2xl border border-[#E2EAF5] bg-white px-4 py-2.5 text-left opacity-0 shadow-[0_12px_30px_rgba(16,41,75,0.16)] transition-[color,background-color,border-color,box-shadow,opacity,translate,scale,rotate,width,background-position] duration-300 group-hover:translate-x-0 group-hover:opacity-100 group-focus-visible:translate-x-0 group-focus-visible:opacity-100 sm:block"
           >
             <span className="block text-sm font-bold text-[#10294B]">{label}</span>
             <span className="block text-xs text-[#52617D]">{sublabel}</span>

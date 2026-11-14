@@ -3,10 +3,9 @@ import { sampleReviewSummary, sampleReviews } from "../Data/reviews";
 
 const ENDPOINT = import.meta.env.VITE_GOOGLE_REVIEWS_ENDPOINT || "/api/google-reviews";
 
-// Sample data only in local development; production starts empty.
-const initialState = import.meta.env.DEV
-  ? { summary: sampleReviewSummary, reviews: sampleReviews }
-  : { summary: null, reviews: [] };
+// Starts with the reviews in Data/reviews.js so they always show (local and deployed),
+// then swaps in live data if the API responds.
+const initialState = { summary: sampleReviewSummary, reviews: sampleReviews };
 
 /**
  * Loads Google reviews from the backend.

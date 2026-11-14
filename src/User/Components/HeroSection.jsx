@@ -70,6 +70,59 @@ const heroSlides = [
 ];
 
 // HERO CAROUSEL
+/*
+  Award seal: a scalloped gold medal with a navy centre, star, "4×" and the
+  award name set around the rim, with two ribbon tails underneath.
+*/
+const SEAL_POINTS = 28;
+const sealPath = Array.from({ length: SEAL_POINTS * 2 }, (_, i) => {
+  const r = i % 2 === 0 ? 78 : 71;
+  const a = (Math.PI * i) / SEAL_POINTS - Math.PI / 2;
+  return `${i === 0 ? "M" : "L"}${(80 + r * Math.cos(a)).toFixed(2)} ${(80 + r * Math.sin(a)).toFixed(2)}`;
+}).join("") + "Z";
+const starPath = Array.from({ length: 10 }, (_, i) => {
+  const r = i % 2 === 0 ? 9 : 3.8;
+  const a = (Math.PI * i) / 5 - Math.PI / 2;
+  return `${i === 0 ? "M" : "L"}${(80 + r * Math.cos(a)).toFixed(2)} ${(60 + r * Math.sin(a)).toFixed(2)}`;
+}).join("") + "Z";
+
+function RoccSeal({ className = "" }) {
+  return (
+    <svg viewBox="0 0 160 186" className={className} role="img" aria-label="Best ROCC Centre, awarded four times">
+      <defs>
+        <linearGradient id="seal-gold" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stopColor="#FFE8A3" />
+          <stop offset="0.5" stopColor="#E9C25C" />
+          <stop offset="1" stopColor="#C9962E" />
+        </linearGradient>
+        <path id="seal-top" d="M 34 80 A 46 46 0 0 1 126 80" />
+        <path id="seal-bottom" d="M 26 80 A 54 54 0 0 0 134 80" />
+      </defs>
+
+      {/* ribbon tails */}
+      <path d="M52 128 L40 184 L58 174 L70 184 L78 134 Z" fill="#B8862A" />
+      <path d="M108 128 L120 184 L102 174 L90 184 L82 134 Z" fill="#D5A943" />
+
+      {/* scalloped edge, gold ring and navy centre */}
+      <path d={sealPath} fill="url(#seal-gold)" />
+      <circle cx="80" cy="80" r="64" fill="#10294B" stroke="#FFE8A3" strokeWidth="2.5" />
+      <circle cx="80" cy="80" r="57" fill="none" stroke="#D5A943" strokeWidth="1" strokeDasharray="1.5 3.5" />
+
+      {/* text around the rim */}
+      <text fontSize="9.5" fontWeight="800" letterSpacing="1.6" fill="#FFE8A3" textAnchor="middle">
+        <textPath href="#seal-top" startOffset="50%">BEST ROCC CENTRE</textPath>
+      </text>
+      <text fontSize="8" fontWeight="700" letterSpacing="1.8" fill="#E9D7A6" textAnchor="middle">
+        <textPath href="#seal-bottom" startOffset="50%">AWARDED FOUR TIMES</textPath>
+      </text>
+
+      {/* star and count */}
+      <path d={starPath} fill="#F2CC6B" />
+      <text x="80" y="102" fontSize="36" fontWeight="900" fill="#F2CC6B" textAnchor="middle" letterSpacing="-1">4×</text>
+    </svg>
+  );
+}
+
 export default function HeroSection() {
   const [activeHero, setActiveHero] = useState(0);
   const prefersReducedMotion = useReducedMotion();
@@ -118,6 +171,9 @@ export default function HeroSection() {
           <div aria-hidden="true" className="pointer-events-none absolute -right-12 -top-20 -z-10 h-[420px] w-[420px] rounded-full border border-white/10" />
           <div aria-hidden="true" className="pointer-events-none absolute bottom-0 right-0 -z-10 h-full w-full bg-gradient-to-t from-[#1762B5]/60 via-[#12447D]/30 to-transparent lg:w-2/3 lg:bg-gradient-to-l" />
 
+          {/* Award seal: pinned to the top-right of the hero, same on every slide */}
+          <RoccSeal className="absolute right-3 top-3 z-30 w-[76px] sm:right-5 sm:top-5 sm:w-[104px] lg:right-8 lg:top-6 lg:w-[120px]" />
+
           <div className="grid lg:min-h-[600px] lg:grid-cols-[1.05fr_0.95fr]">
             {/* LEFT CONTENT — all slides share one grid cell, so the height
                 always fits the longest slide (no overlap, no layout jump) */}
@@ -156,7 +212,7 @@ export default function HeroSection() {
                         <Link
                           to={slide.primaryLink}
                           tabIndex={isActive ? undefined : -1}
-                          className="group inline-flex items-center gap-3 rounded-full bg-white py-2.5 pl-6 pr-2.5 text-sm font-bold text-[#12396B] shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#DDF3FF] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#70C7FF]/60"
+                          className="group inline-flex items-center gap-3 rounded-full bg-white py-2.5 pl-6 pr-2.5 text-sm font-bold text-[#12396B] shadow-lg transition-[color,background-color,border-color,box-shadow,opacity,translate,scale,rotate,width,background-position] duration-300 hover:-translate-y-0.5 hover:bg-[#DDF3FF] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#70C7FF]/60"
                         >
                           {slide.primary}
                           <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#1456A0] text-white transition-transform group-hover:translate-x-0.5">
@@ -166,7 +222,7 @@ export default function HeroSection() {
                         <Link
                           to={slide.secondaryLink}
                           tabIndex={isActive ? undefined : -1}
-                          className="inline-flex items-center gap-2 rounded-full border border-white/40 px-5 py-3.5 text-sm sm:px-6 font-semibold text-white transition-all duration-300 hover:border-white hover:bg-white/10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#70C7FF]/60"
+                          className="inline-flex items-center gap-2 rounded-full border border-white/40 px-5 py-3.5 text-sm sm:px-6 font-semibold text-white transition-[color,background-color,border-color,box-shadow,opacity,translate,scale,rotate,width,background-position] duration-300 hover:border-white hover:bg-white/10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#70C7FF]/60"
                         >
                           {slide.secondary}
                           <FiArrowUpRight />
@@ -175,19 +231,6 @@ export default function HeroSection() {
                     </div>
                   );
                 })}
-              </div>
-
-              {/* Award highlight — same on every slide */}
-              <div className="mt-7 inline-flex w-fit max-w-full items-center gap-2.5 rounded-2xl border border-[#D5A943]/45 sm:gap-4 bg-gradient-to-r from-[#D5A943]/[0.16] to-[#D5A943]/[0.04] py-3 pl-3 pr-4 sm:pr-5 sm:mt-8">
-                <span className="relative flex h-11 w-11 shrink-0 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-gradient-to-br from-[#FFE8A3] via-[#E9C25C] to-[#C9962E] text-[#10294B] shadow-[0_6px_18px_rgba(213,169,67,0.35)]">
-                  <FiAward size={22} strokeWidth={2.4} aria-hidden="true" />
-                </span>
-                <span className="text-[26px] font-black leading-none tracking-tight text-[#F2CC6B] sm:text-[34px]">4×</span>
-                <span className="hidden h-9 w-px bg-[#D5A943]/40 min-[360px]:block" aria-hidden="true" />
-                <span className="leading-tight">
-                  <span className="block whitespace-nowrap text-[15px] font-extrabold text-white">Best ROCC Centre</span>
-                  <span className="mt-0.5 block text-xs font-medium text-[#E9D7A6]">Awarded four times</span>
-                </span>
               </div>
 
               {/* Pagination — 44px tall hit areas around slim bars */}
@@ -206,7 +249,7 @@ export default function HeroSection() {
                       className="group flex h-11 items-center px-1 focus-visible:outline-none"
                     >
                       <span
-                        className={`block h-1.5 rounded-full transition-all duration-300 group-focus-visible:ring-2 group-focus-visible:ring-[#70C7FF] ${
+                        className={`block h-1.5 rounded-full transition-[color,background-color,border-color,box-shadow,opacity,translate,scale,rotate,width,background-position] duration-300 group-focus-visible:ring-2 group-focus-visible:ring-[#70C7FF] ${
                           activeHero === index ? "w-10 bg-[#70C7FF]" : "w-5 bg-white/35 group-hover:bg-white/60"
                         }`}
                       />

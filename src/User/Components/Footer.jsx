@@ -264,7 +264,7 @@ export default function Footer() {
                     rel="noopener noreferrer"
                     aria-label={label}
                     title={label}
-                    className="flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-white/[0.04] text-[#DCE6F5] transition-all duration-300 hover:-translate-y-1 hover:border-transparent hover:bg-gradient-to-br hover:from-[#1762B5] hover:to-[#70C7FF] hover:text-white hover:shadow-[0_10px_24px_rgba(23,98,181,0.45)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#70C7FF]"
+                    className="flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-white/[0.04] text-[#DCE6F5] transition-[color,background-color,border-color,box-shadow,opacity,translate,scale,rotate,width,background-position] duration-300 hover:-translate-y-1 hover:border-transparent hover:bg-gradient-to-br hover:from-[#1762B5] hover:to-[#70C7FF] hover:text-white hover:shadow-[0_10px_24px_rgba(23,98,181,0.45)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#70C7FF]"
                   >
                     <Icon size={16} />
                   </a>
@@ -324,7 +324,7 @@ export default function Footer() {
             type="button"
             onClick={scrollToTop}
             aria-label="Back to top"
-            className="col-start-2 row-span-2 row-start-1 flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-white/[0.04] text-[#DCE6F5] transition-all duration-300 hover:-translate-y-0.5 hover:border-transparent hover:bg-gradient-to-br hover:from-[#1762B5] hover:to-[#70C7FF] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#70C7FF] sm:row-span-1"
+            className="col-start-2 row-span-2 row-start-1 flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-white/[0.04] text-[#DCE6F5] transition-[color,background-color,border-color,box-shadow,opacity,translate,scale,rotate,width,background-position] duration-300 hover:-translate-y-0.5 hover:border-transparent hover:bg-gradient-to-br hover:from-[#1762B5] hover:to-[#70C7FF] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#70C7FF] sm:row-span-1"
           >
             <FiArrowUp size={16} />
           </button>

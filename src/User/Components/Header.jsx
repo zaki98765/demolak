@@ -130,7 +130,7 @@ export default function CatalystNavbar() {
             {/* Desktop CTA */}
             <Link
               to="/enquiry"
-              className="group relative hidden shrink-0 items-center gap-2 overflow-hidden rounded-full bg-[#26345C] px-5 py-3 text-[13px] font-semibold text-white shadow-[0_5px_16px_rgba(38,52,92,0.18)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#6678A8] lg:inline-flex"
+              className="group relative hidden shrink-0 items-center gap-2 overflow-hidden rounded-full bg-[#26345C] px-5 py-3 text-[13px] font-semibold text-white shadow-[0_5px_16px_rgba(38,52,92,0.18)] transition-[color,background-color,border-color,box-shadow,opacity,translate,scale,rotate,width,background-position] duration-300 hover:-translate-y-0.5 hover:bg-[#6678A8] lg:inline-flex"
             >
               <span>Enquire Now</span>
               <FiArrowUpRight className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
@@ -158,10 +158,11 @@ export default function CatalystNavbar() {
             {mobileOpen && (
               <motion.div
                 id="catalyst-mobile-menu"
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.25 }}
+                initial={{ opacity: 0, y: -10, scale: 0.98 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -10, scale: 0.98 }}
+                transition={{ duration: 0.22, ease: [0.2, 0.8, 0.2, 1] }}
+                style={{ transformOrigin: "top center" }}
                 className="absolute inset-x-0 top-[calc(100%+10px)] overflow-hidden rounded-[26px] border border-white/80 bg-[#F7F8FC]/90 shadow-[0_20px_60px_rgba(38,52,92,0.15)] backdrop-blur-3xl lg:hidden"
               >
                 <div className="flex flex-col gap-1 p-4">

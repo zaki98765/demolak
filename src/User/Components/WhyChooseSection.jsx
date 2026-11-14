@@ -61,34 +61,37 @@ function ReasonCard({ reason, index }) {
   return (
     <motion.li
       variants={cardVariants}
-      className="group relative isolate flex h-full flex-row items-center gap-4 overflow-hidden rounded-[22px] border border-[#E2EAF5] bg-white px-5 py-5 text-left sm:flex-col sm:gap-0 sm:rounded-[26px] sm:px-6 sm:pb-8 sm:pt-9 sm:text-center shadow-[0_10px_30px_rgba(16,41,75,0.05)] transition-[box-shadow,border-color,translate] duration-500 hover:-translate-y-1.5 hover:border-[#9CCBF5] hover:shadow-[0_24px_50px_rgba(23,98,181,0.14)] motion-reduce:hover:translate-y-0"
+      className="group relative isolate flex h-full flex-row items-center gap-4 overflow-hidden rounded-[22px] bg-gradient-to-br from-[#10294B] via-[#133A6E] to-[#1762B5] bg-[length:180%_180%] bg-left-top px-5 py-5 text-left shadow-[0_14px_34px_rgba(16,41,75,0.22)] transition-[background-position,box-shadow,translate] duration-500 hover:-translate-y-1.5 hover:bg-right-bottom hover:shadow-[0_24px_50px_rgba(23,98,181,0.35)] motion-reduce:hover:translate-y-0 sm:flex-col sm:gap-0 sm:rounded-[26px] sm:px-6 sm:pb-8 sm:pt-9 sm:text-center"
     >
-      {/* Hover wash */}
+      {/* Large faded index behind the content */}
       <span
         aria-hidden="true"
-        className="absolute inset-0 -z-10 bg-gradient-to-b from-[#EAF3FF] to-white opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-      />
-      {/* Index */}
-      <span className="absolute right-4 top-3 text-xs font-black sm:left-5 sm:right-auto sm:top-4 tracking-[0.18em] text-[#66758F] transition-colors duration-300 group-hover:text-[#1762B5]">
+        className="pointer-events-none absolute -bottom-5 -right-1 -z-10 select-none text-[110px] font-black leading-none tracking-tighter text-white/[0.06] transition-transform duration-500 group-hover:-translate-y-1 group-hover:scale-105 sm:-bottom-6 sm:text-[140px]"
+      >
         {String(index + 1).padStart(2, "0")}
       </span>
 
-      {/* Icon */}
+      {/* Small index */}
+      <span className="absolute right-4 top-3 text-xs font-black tracking-[0.18em] text-[#70C7FF] sm:left-5 sm:right-auto sm:top-4">
+        {String(index + 1).padStart(2, "0")}
+      </span>
+
+      {/* Icon: white on a blue disc, with a ring that expands on hover */}
       <motion.span variants={iconVariants} className="relative shrink-0">
         <span
           aria-hidden="true"
-          className="absolute inset-0 -z-10 scale-100 rounded-full bg-[#70C7FF]/25 opacity-0 blur-md transition-all duration-500 group-hover:scale-150 group-hover:opacity-100"
+          className="absolute inset-0 rounded-full border border-white/40 opacity-0 transition-[color,background-color,border-color,box-shadow,opacity,translate,scale,rotate,width,background-position] duration-500 group-hover:scale-[1.45] group-hover:opacity-100"
         />
-        <span className="flex h-14 w-14 items-center justify-center rounded-full bg-[#EAF3FF] text-[#1762B5] ring-[6px] ring-[#F4F8FE] sm:h-[72px] sm:w-[72px] sm:ring-8 transition-all duration-500 group-hover:bg-gradient-to-br group-hover:from-[#10294B] group-hover:to-[#1762B5] group-hover:text-white group-hover:ring-[#EAF3FF]">
-          <Icon className="h-6 w-6 sm:h-7 sm:w-7" />
+        <span className="flex h-14 w-14 items-center justify-center rounded-full bg-[#1762B5] text-white ring-[6px] ring-white/10 transition-[color,background-color,border-color,box-shadow,opacity,translate,scale,rotate,width,background-position] duration-300 group-hover:bg-white/15 group-hover:ring-white/20 sm:h-[72px] sm:w-[72px] sm:ring-8">
+          <Icon className="h-6 w-6 transition-transform duration-300 group-hover:scale-110 sm:h-7 sm:w-7" />
         </span>
       </motion.span>
 
-      <h3 className="pr-6 text-[15px] font-extrabold leading-snug text-[#10294B] sm:mt-6 sm:max-w-[16rem] sm:pr-0 sm:text-lg">
+      <h3 className="pr-6 text-[15px] font-extrabold leading-snug text-white sm:mt-6 sm:max-w-[16rem] sm:pr-0 sm:text-lg">
         {reason.title}
       </h3>
 
-      <span className="mt-4 hidden h-[3px] w-8 rounded-full sm:block bg-gradient-to-r from-[#1762B5] to-[#70C7FF] transition-all duration-500 group-hover:w-16" />
+      <span className="mt-4 hidden h-[3px] w-8 rounded-full bg-[#70C7FF] transition-[color,background-color,border-color,box-shadow,opacity,translate,scale,rotate,width,background-position] duration-300 group-hover:w-16 sm:block" />
     </motion.li>
   );
 }
@@ -110,12 +113,12 @@ export default function WhyChooseSection() {
       <motion.div
         aria-hidden="true"
         style={{ y: glowY }}
-        className="pointer-events-none absolute -left-32 top-10 h-96 w-96 rounded-full bg-[#70C7FF]/15 blur-3xl"
+        className="pointer-events-none absolute -left-32 top-10 h-96 w-96 rounded-full bg-[#70C7FF]/15 blur-3xl will-change-transform"
       />
       <motion.div
         aria-hidden="true"
         style={{ y: glowY2 }}
-        className="pointer-events-none absolute -right-32 bottom-0 h-[420px] w-[420px] rounded-full bg-[#1762B5]/10 blur-3xl"
+        className="pointer-events-none absolute -right-32 bottom-0 h-[420px] w-[420px] rounded-full bg-[#1762B5]/10 blur-3xl will-change-transform"
       />
 
       <div className="relative mx-auto max-w-7xl px-5 sm:px-8">
@@ -166,7 +169,7 @@ export default function WhyChooseSection() {
         >
           <Link
             to="/enquiry"
-            className="group inline-flex items-center gap-3 rounded-full bg-gradient-to-r from-[#10294B] via-[#1762B5] to-[#3A8DDE] px-7 py-4 text-sm font-extrabold uppercase tracking-[0.08em] text-white shadow-[0_14px_32px_rgba(23,98,181,0.30)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(23,98,181,0.40)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1762B5] focus-visible:ring-offset-2 sm:px-9"
+            className="group inline-flex items-center gap-3 rounded-full bg-gradient-to-r from-[#10294B] via-[#1762B5] to-[#3A8DDE] px-7 py-4 text-sm font-extrabold uppercase tracking-[0.08em] text-white shadow-[0_14px_32px_rgba(23,98,181,0.30)] transition-[color,background-color,border-color,box-shadow,opacity,translate,scale,rotate,width,background-position] duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(23,98,181,0.40)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1762B5] focus-visible:ring-offset-2 sm:px-9"
           >
             <FiHeadphones size={18} />
             Book a free career counseling now

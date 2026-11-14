@@ -8,8 +8,8 @@
   (VITE_GOOGLE_REVIEWS_ENDPOINT, default /api/google-reviews), which should return:
     { summary: { rating, total, breakdown: { 5, 4, 3, 2, 1 } }, reviews: [ ...same shape as below ] }
 
-  The sample data below is used ONLY in local development (npm run dev) so the
-  design can be previewed. It is never rendered in a production build.
+  The reviews below are shown everywhere (local and deployed) until the API above
+  returns live data. Replace them with real reviews copied from Google.
 */
 
 export const GOOGLE_REVIEWS_URL = "#";

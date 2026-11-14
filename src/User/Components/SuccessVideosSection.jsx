@@ -11,15 +11,29 @@ import { YOUTUBE_CHANNEL_URL, successVideos } from "../Data/videos";
 
 const thumb = (id) => `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
 
-function PlayBadge({ size = "lg" }) {
-  const box = size === "lg" ? "h-16 w-16" : "h-12 w-12";
-  const icon = size === "lg" ? 26 : 20;
+// YouTube mark for the section heading: red ring around the play button
+function YouTubeMark() {
   return (
-    <span className={`relative flex ${box} shrink-0 items-center justify-center`}>
-      <span aria-hidden="true" className="absolute inset-0 animate-[fab-pulse_2.6s_ease-out_infinite] rounded-full bg-[#1762B5] motion-reduce:hidden" />
-      <span className={`relative flex ${box} items-center justify-center rounded-full bg-gradient-to-br from-[#10294B] to-[#1762B5] text-white shadow-[0_12px_30px_rgba(23,98,181,0.45)] ring-4 ring-white/80`}>
-        <FiPlay size={icon} className="translate-x-[2px] fill-current" />
-      </span>
+    <svg viewBox="0 0 64 64" className="h-14 w-14 shrink-0 sm:h-16 sm:w-16" role="img" aria-label="YouTube">
+      <circle cx="32" cy="32" r="29" fill="#fff" stroke="#FF0000" strokeWidth="4" />
+      <rect x="14" y="19" width="36" height="26" rx="8" fill="#FF0000" />
+      <path d="M28 25.5v13l11-6.5z" fill="#fff" />
+    </svg>
+  );
+}
+
+// Play button for the video previews: frosted, see-through glass
+function GlassPlay() {
+  return (
+    <span
+      aria-hidden="true"
+      className="relative flex h-[68px] w-[68px] items-center justify-center overflow-hidden rounded-full bg-white/[0.14] shadow-[inset_0_1.5px_1px_rgba(255,255,255,0.75),inset_0_-10px_18px_rgba(255,255,255,0.10),inset_0_0_0_1px_rgba(255,255,255,0.28),0_14px_34px_rgba(0,0,0,0.30)] backdrop-blur-md backdrop-saturate-150"
+    >
+      {/* soft highlight along the top edge, like light on glass */}
+      <span className="absolute inset-x-3 top-[3px] h-[42%] rounded-full bg-gradient-to-b from-white/55 to-transparent" />
+      {/* faint glow low on the rim */}
+      <span className="absolute inset-x-5 bottom-[2px] h-[22%] rounded-full bg-gradient-to-t from-white/25 to-transparent blur-[2px]" />
+      <FiPlay size={27} className="relative translate-x-[2px] fill-white text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.35)]" />
     </span>
   );
 }
@@ -43,9 +57,9 @@ function VideoCard({ video, onPlay, hidden }) {
             decoding="async"
             className="h-full w-full scale-[1.02] object-cover transition-transform duration-700 ease-out group-hover:scale-110"
           />
-          <span aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-[#081830]/70 via-[#10294B]/10 to-transparent transition-opacity duration-500 group-hover:opacity-80" />
+          <span aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-[#081830]/45 via-transparent to-transparent transition-opacity duration-500 group-hover:opacity-80" />
           <span className="absolute inset-0 flex items-center justify-center transition-transform duration-500 group-hover:scale-110">
-            <PlayBadge />
+            <GlassPlay />
           </span>
           {video.tag && (
             <span className="absolute left-3 top-3 rounded-full bg-white/90 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#1762B5] backdrop-blur">
@@ -57,7 +71,7 @@ function VideoCard({ video, onPlay, hidden }) {
           <span className="line-clamp-2 min-h-[2.6rem] text-[15px] font-extrabold leading-snug text-[#10294B] transition-colors duration-300 group-hover:text-[#1762B5]">
             {video.label}
           </span>
-          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#EAF3FF] text-[#1762B5] transition-all duration-300 group-hover:bg-[#1762B5] group-hover:text-white">
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#EAF3FF] text-[#1762B5] transition-[color,background-color,border-color,box-shadow,opacity,translate,scale,rotate,width,background-position] duration-300 group-hover:bg-[#1762B5] group-hover:text-white">
             <FiPlay size={14} className="translate-x-[1px] fill-current" />
           </span>
         </span>
@@ -151,7 +165,7 @@ export default function SuccessVideosSection() {
           className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end"
         >
           <div className="flex items-center gap-5">
-            <PlayBadge />
+            <YouTubeMark />
             <div>
               <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#1762B5]">Watch on YouTube</p>
               <h2
@@ -167,7 +181,7 @@ export default function SuccessVideosSection() {
             href={YOUTUBE_CHANNEL_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="group inline-flex w-fit items-center gap-2 rounded-full bg-gradient-to-r from-[#10294B] to-[#1762B5] px-6 py-3.5 text-sm font-bold text-white shadow-[0_10px_25px_rgba(23,98,181,0.25)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_14px_32px_rgba(23,98,181,0.32)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1762B5] focus-visible:ring-offset-2"
+            className="group inline-flex w-fit items-center gap-2 rounded-full bg-gradient-to-r from-[#10294B] to-[#1762B5] px-6 py-3.5 text-sm font-bold text-white shadow-[0_10px_25px_rgba(23,98,181,0.25)] transition-[color,background-color,border-color,box-shadow,opacity,translate,scale,rotate,width,background-position] duration-300 hover:-translate-y-0.5 hover:shadow-[0_14px_32px_rgba(23,98,181,0.32)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1762B5] focus-visible:ring-offset-2"
           >
             More on our channel
             <FiArrowUpRight className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />

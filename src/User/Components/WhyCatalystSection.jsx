@@ -155,7 +155,7 @@ export default function WhyCatalystSection() {
               {pillars.map(({ icon: Icon, title, text }) => (
                 <li
                   key={title}
-                  className="group flex items-start gap-3 rounded-2xl border border-[#E2EAF5] bg-white p-4 transition-all sm:block duration-300 hover:-translate-y-1 hover:border-[#9CCBF5] hover:shadow-[0_14px_30px_rgba(23,98,181,0.10)] motion-reduce:hover:translate-y-0"
+                  className="group flex items-start gap-3 rounded-2xl border border-[#E2EAF5] bg-white p-4 transition-[color,background-color,border-color,box-shadow,opacity,translate,scale,rotate,width,background-position] sm:block duration-300 hover:-translate-y-1 hover:border-[#9CCBF5] hover:shadow-[0_14px_30px_rgba(23,98,181,0.10)] motion-reduce:hover:translate-y-0"
                 >
                   <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#EAF3FF] text-[#1762B5] transition-colors duration-300 group-hover:bg-[#1762B5] group-hover:text-white">
                     <Icon size={18} />
@@ -189,7 +189,7 @@ export default function WhyCatalystSection() {
             <div className="mt-7 flex flex-wrap items-center gap-3">
               <Link
                 to="/enquiry"
-                className="group inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#10294B] to-[#1762B5] px-6 py-3.5 text-sm font-bold text-white shadow-[0_10px_25px_rgba(23,98,181,0.25)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_14px_32px_rgba(23,98,181,0.32)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1762B5] focus-visible:ring-offset-2"
+                className="group inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#10294B] to-[#1762B5] px-6 py-3.5 text-sm font-bold text-white shadow-[0_10px_25px_rgba(23,98,181,0.25)] transition-[color,background-color,border-color,box-shadow,opacity,translate,scale,rotate,width,background-position] duration-300 hover:-translate-y-0.5 hover:shadow-[0_14px_32px_rgba(23,98,181,0.32)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1762B5] focus-visible:ring-offset-2"
               >
                 Book a free career counselling
                 <FiArrowRight className="transition-transform duration-300 group-hover:translate-x-1" />

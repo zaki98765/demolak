@@ -85,7 +85,7 @@ export default function LearnYoutubeSection() {
         </div>
 
         {/* Playlist */}
-        <div className="mt-10 grid gap-8 lg:grid-cols-[1.6fr_1fr] lg:gap-10">
+        <div className="mt-8 grid gap-8 sm:mt-10 lg:grid-cols-[1.6fr_1fr] lg:gap-10">
           {/* Featured */}
           <motion.a
             href={featured.url ?? YOUTUBE_CHANNEL_URL}

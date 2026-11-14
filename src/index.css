@@ -53,11 +53,11 @@ body {
 
 @keyframes course-marquee {
   from {
-    transform: translateX(0);
+    transform: translate3d(0, 0, 0);
   }
 
   to {
-    transform: translateX(-50%);
+    transform: translate3d(-50%, 0, 0);
   }
 }
 
@@ -92,11 +92,11 @@ body {
 
 @keyframes logo-marquee {
   from {
-    transform: translateX(0);
+    transform: translate3d(0, 0, 0);
   }
 
   to {
-    transform: translateX(-50%);
+    transform: translate3d(-50%, 0, 0);
   }
 }
 
@@ -221,4 +221,35 @@ body {
 @keyframes scroll-cue {
   0% { transform: translateY(-100%); }
   100% { transform: translateY(200%); }
+}
+
+/* ================================================================
+   SMOOTHNESS
+   Keep animation on the GPU and avoid work that stalls scrolling.
+   ================================================================ */
+
+/* No tap flash and no 300ms tap delay on touch screens */
+html { -webkit-tap-highlight-color: transparent; }
+a, button, [role="button"], summary, label, select { touch-action: manipulation; }
+
+/* Marquees and other long-running movers get their own layer */
+.course-track, .logo-track, .video-track, .review-track { backface-visibility: hidden; transform: translateZ(0); }
+
+/* Anything sticky or pinned stays on its own layer so scroll doesn't repaint it */
+.sticky { backface-visibility: hidden; }
+
+/* Phones: the big blurred background glows are the most expensive thing on the
+   page to paint, and they are decoration only. */
+@media (max-width: 640px) {
+  [class*="blur-3xl"]:not([class*="backdrop-"]), [class*="blur-[100px]"]:not([class*="backdrop-"]), [class*="blur-[110px]"]:not([class*="backdrop-"]), [class*="blur-[120px]"]:not([class*="backdrop-"]) { display: none; }
+}
+
+/* Reduced motion: stop everything that loops or slides */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

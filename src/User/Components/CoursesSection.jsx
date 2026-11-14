@@ -42,7 +42,7 @@ export default function CoursesSection() {
 
           <Link
             to="/courses"
-            className="group inline-flex w-fit items-center gap-3 rounded-full border border-[#1762B5]/20 bg-white px-6 py-3 text-sm font-bold text-[#1762B5] shadow-sm transition-all duration-300 hover:border-[#1762B5] hover:bg-[#1762B5] hover:text-white"
+            className="group inline-flex w-fit items-center gap-3 rounded-full border border-[#1762B5]/20 bg-white px-6 py-3 text-sm font-bold text-[#1762B5] shadow-sm transition-[color,background-color,border-color,box-shadow,opacity,translate,scale,rotate,width,background-position] duration-300 hover:border-[#1762B5] hover:bg-[#1762B5] hover:text-white"
           >
             View all courses
             <FiArrowRight className="transition-transform duration-300 group-hover:translate-x-1" />
@@ -95,7 +95,7 @@ export default function CoursesSection() {
                         {course.category}
                       </span>
 
-                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#EAF3FF] text-lg text-[#1762B5] transition-all duration-300 group-hover:bg-[#1762B5] group-hover:text-white">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#EAF3FF] text-lg text-[#1762B5] transition-[color,background-color,border-color,box-shadow,opacity,translate,scale,rotate,width,background-position] duration-300 group-hover:bg-[#1762B5] group-hover:text-white">
                         <FiBookOpen />
                       </div>
                     </div>
@@ -145,7 +145,7 @@ export default function CoursesSection() {
                       <Link
                         to={course.path}
                         tabIndex={group === 1 ? -1 : undefined}
-                        className="group/btn flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#10294B] to-[#1762B5] text-sm font-bold text-white shadow-md transition-all duration-300 hover:shadow-lg"
+                        className="group/btn flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#10294B] to-[#1762B5] text-sm font-bold text-white shadow-md transition-[color,background-color,border-color,box-shadow,opacity,translate,scale,rotate,width,background-position] duration-300 hover:shadow-lg"
                       >
                         Learn More<span className="sr-only"> about {course.title}</span>
                         <FiArrowRight className="transition-transform group-hover/btn:translate-x-1" />
@@ -175,7 +175,7 @@ export default function CoursesSection() {
                     </div>
 
                     {/* Bottom accent */}
-                    <div className="absolute bottom-0 left-0 h-1 w-0 bg-gradient-to-r from-[#1762B5] to-[#70C7FF] transition-all duration-500 group-hover:w-full" />
+                    <div className="absolute bottom-0 left-0 h-1 w-0 bg-gradient-to-r from-[#1762B5] to-[#70C7FF] transition-[color,background-color,border-color,box-shadow,opacity,translate,scale,rotate,width,background-position] duration-500 group-hover:w-full" />
 
                   </motion.div>
 

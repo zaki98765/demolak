@@ -124,12 +124,12 @@ function CampusCard({ campus, index, className = "" }) {
             {campus.address || "Address coming soon"}
           </p>
         </div>
-        <span className="mt-1 flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#EAF3FF] text-[#1762B5] transition-all duration-500 group-hover:rotate-45 group-hover:bg-gradient-to-br group-hover:from-[#10294B] group-hover:to-[#1762B5] group-hover:text-white">
+        <span className="mt-1 flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#EAF3FF] text-[#1762B5] transition-[color,background-color,border-color,box-shadow,opacity,translate,scale,rotate,width,background-position] duration-500 group-hover:rotate-45 group-hover:bg-gradient-to-br group-hover:from-[#10294B] group-hover:to-[#1762B5] group-hover:text-white">
           <FiArrowUpRight size={18} />
         </span>
       </div>
 
-      <span className="mx-3 mb-2 block h-[3px] w-10 rounded-full bg-gradient-to-r from-[#1762B5] to-[#70C7FF] transition-all duration-500 group-hover:w-24" />
+      <span className="mx-3 mb-2 block h-[3px] w-10 rounded-full bg-gradient-to-r from-[#1762B5] to-[#70C7FF] transition-[color,background-color,border-color,box-shadow,opacity,translate,scale,rotate,width,background-position] duration-500 group-hover:w-24" />
     </Link>
   );
 }
@@ -156,6 +156,25 @@ function Heading({ counter }) {
 }
 
 /* ---------- desktop: pinned horizontal scroll ---------- */
+const INTRO_W = 300; // the fixed "09 campuses" card
+const CARD_W = 380;
+const GAP = 24;
+const LEAD = INTRO_W + GAP; // where the first card starts
+
+// A card in the moving row. As it reaches the fixed intro card it shrinks and
+// fades, so it looks like it slips inside that card.
+function TrackCard({ campus, index, x }) {
+  const left = LEAD + index * (CARD_W + GAP);
+  const t = useTransform(x, (v) => Math.min(1, Math.max(0, (LEAD - (left + v)) / CARD_W)));
+  const scale = useTransform(t, [0, 1], [1, 0.88]);
+  const opacity = useTransform(t, [0, 1], [1, 0.35]);
+  return (
+    <motion.div style={{ scale, opacity, transformOrigin: "left center" }} className="shrink-0">
+      <CampusCard campus={campus} index={index} className="h-full w-[380px]" />
+    </motion.div>
+  );
+}
+
 function PinnedGallery() {
   const outerRef = useRef(null);
   const viewportRef = useRef(null);
@@ -203,26 +222,29 @@ function PinnedGallery() {
   );
 
   return (
-    <div ref={outerRef} style={{ height: `calc(100vh + ${distance}px)` }} className="relative">
-      <div className="sticky top-0 flex h-screen flex-col justify-center overflow-hidden pt-16">
+    <div ref={outerRef} style={{ height: `calc(100svh + ${distance}px)` }} className="relative">
+      <div className="sticky top-0 flex h-[100svh] flex-col justify-center overflow-hidden pt-16">
         <div className="mx-auto w-full max-w-7xl px-8">
           <Heading counter={counter} />
         </div>
 
-        <div ref={viewportRef} className="mx-auto mt-10 w-full max-w-7xl px-8">
-          <motion.div ref={trackRef} style={{ x }} className="flex w-max items-center gap-6 will-change-transform">
-            <IntroCard className="h-[392px] w-[300px]" />
-            {campuses.map((campus, index) => (
-              <CampusCard
-                key={campus.name}
-                campus={campus}
-                index={index}
-                className={`w-[380px] ${index % 2 === 0 ? "lg:translate-y-5" : "lg:-translate-y-5"}`}
-              />
-            ))}
-            {/* breathing room at the end of the track */}
-            <span aria-hidden="true" className="w-8 shrink-0" />
-          </motion.div>
+        <div ref={viewportRef} className="relative mx-auto mt-10 w-full max-w-7xl px-8">
+          {/* Fixed card: stays put while every campus slides in behind it */}
+          <div className="absolute bottom-0 left-8 top-0 z-20 w-[300px]">
+            <IntroCard className="h-full w-full" />
+          </div>
+
+          {/* Clip on the left edge of the intro card only (the row may bleed off the right) */}
+          <div className="[clip-path:inset(-40px_-100vw_-40px_0)]">
+            <motion.div ref={trackRef} style={{ x }} className="flex w-max items-stretch gap-6 will-change-transform">
+              <span aria-hidden="true" className="w-[300px] shrink-0" />
+              {campuses.map((campus, index) => (
+                <TrackCard key={campus.name} campus={campus} index={index} x={x} />
+              ))}
+              {/* breathing room at the end of the track */}
+              <span aria-hidden="true" className="w-8 shrink-0" />
+            </motion.div>
+          </div>
         </div>
 
         <p className="mx-auto mt-10 flex w-full max-w-7xl items-center gap-2 px-8 text-xs font-semibold uppercase tracking-[0.18em] text-[#5F6F8C]">
@@ -249,7 +271,7 @@ function SwipeGallery() {
         </Reveal>
       </div>
 
-      <div className="mt-10 flex snap-x snap-mandatory scroll-px-5 gap-4 overflow-x-auto scroll-smooth px-5 pb-4 sm:scroll-px-8 [scrollbar-width:none] sm:px-8 [&::-webkit-scrollbar]:hidden">
+      <div className="mt-8 flex snap-x snap-mandatory sm:mt-10 scroll-px-5 gap-4 overflow-x-auto scroll-smooth px-5 pb-4 sm:scroll-px-8 [scrollbar-width:none] sm:px-8 [&::-webkit-scrollbar]:hidden">
         <IntroCard className="w-[82vw] max-w-[340px] snap-start" />
         {campuses.map((campus, index) => (
           <CampusCard

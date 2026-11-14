@@ -45,7 +45,7 @@ const lightCard = `${cardBase} border-[#E2EAF5] hover:border-[#9CCBF5] hover:sha
 function IconTile({ icon: Icon, tone = "light" }) {
   return (
     <span
-      className={`flex h-12 w-12 items-center justify-center rounded-2xl transition-all duration-300 ${
+      className={`flex h-12 w-12 items-center justify-center rounded-2xl transition-[color,background-color,border-color,box-shadow,opacity,translate,scale,rotate,width,background-position] duration-300 ${
         tone === "light"
           ? "bg-[#EAF3FF] text-[#1762B5] group-hover:bg-[#1762B5] group-hover:text-white"
           : "bg-white text-[#1762B5] shadow-sm group-hover:bg-[#1762B5] group-hover:text-white"
@@ -167,7 +167,7 @@ function StudentsCard() {
 
         <Link
           to="/enquiry"
-          className="group/cta inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-bold text-[#10294B] shadow-lg transition-all duration-300 hover:bg-[#DDF3FF] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#70C7FF]"
+          className="group/cta inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-bold text-[#10294B] shadow-lg transition-[color,background-color,border-color,box-shadow,opacity,translate,scale,rotate,width,background-position] duration-300 hover:bg-[#DDF3FF] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#70C7FF]"
         >
           Start your journey
           <FiArrowUpRight className="transition-transform duration-300 group-hover/cta:-translate-y-0.5 group-hover/cta:translate-x-0.5" />
@@ -259,7 +259,7 @@ export default function StatsSection() {
   return (
     <section
       aria-labelledby="stats-heading"
-      className="relative overflow-hidden bg-white px-5 py-16 sm:px-8 sm:py-20 lg:py-24"
+      className="relative overflow-hidden bg-white px-5 py-14 sm:px-8 sm:py-16 lg:py-20"
     >
       <div className="pointer-events-none absolute left-1/2 top-0 h-[300px] w-[700px] -translate-x-1/2 rounded-full bg-[#EAF4FF]/60 blur-[100px]" />
 
