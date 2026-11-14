@@ -132,12 +132,21 @@ export default function FacultySection() {
             </Link>
           </div>
         </Reveal>
+      </div>
 
-        <div className="mt-8 grid grid-cols-2 sm:mt-10 gap-4 sm:gap-6 lg:grid-cols-4">
-          {faculty.map((member, index) => (
-            <Reveal key={member.name}>
-              <FacultyCard member={member} index={index} />
-            </Reveal>
+      {/* Mentor cards glide right to left, looping forever (list is repeated so the loop is seamless) */}
+      <div className="faculty-marquee relative mt-6 sm:mt-8">
+        <div className="faculty-track flex w-max">
+          {[0, 1].map((copy) => (
+            <div key={copy} className="flex shrink-0" aria-hidden={copy === 1 ? "true" : undefined}>
+              {[0, 1].flatMap((rep) =>
+                faculty.map((member, index) => (
+                  <div key={`${rep}-${member.name}`} className="w-[210px] shrink-0 pr-4 sm:w-[270px] sm:pr-6 lg:w-[300px]">
+                    <FacultyCard member={member} index={index} />
+                  </div>
+                ))
+              )}
+            </div>
           ))}
         </div>
       </div>

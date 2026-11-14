@@ -253,3 +253,33 @@ a, button, [role="button"], summary, label, select { touch-action: manipulation;
     scroll-behavior: auto !important;
   }
 }
+
+/* Faculty marquee — right to left */
+.faculty-marquee {
+  overflow: hidden;
+  padding: 24px 0 32px;
+  mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+}
+
+.faculty-track {
+  animation: faculty-marquee 40s linear infinite;
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .faculty-marquee:hover .faculty-track {
+    animation-play-state: paused;
+  }
+}
+
+@keyframes faculty-marquee {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .faculty-track { animation: none; }
+  .faculty-marquee { overflow-x: auto; }
+}

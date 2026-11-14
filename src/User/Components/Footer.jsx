@@ -332,7 +332,7 @@ export default function Footer() {
           <p className="col-start-1 row-start-2 sm:col-start-3 sm:row-start-1 sm:text-right">
             Developed by{" "}
             <span className="font-semibold text-[#DCE6F5]">
-              BRAND HACKERS
+              BRANDHACKERS
             </span>
           </p>
         </div>

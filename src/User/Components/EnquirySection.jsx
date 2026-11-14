@@ -66,7 +66,7 @@ export default function EnquirySection() {
           <h2 id="enquiry-heading" className="mt-2 text-3xl font-extrabold tracking-tight text-[#10294B] sm:text-4xl lg:text-[44px] lg:leading-[1.1]">
             Not sure which course is right for you?
           </h2>
-          <p className="mt-4 max-w-md text-[15px] leading-7 text-[#52617D]">
+          <p className="mt-4 max-w-md text-[14px] leading-7 text-[#52617D]">
             Leave your number and one of our counsellors will call you back. The
             first conversation is free, and there&apos;s no pressure to enrol.
           </p>

@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import { motion } from "motion/react";
+import { useRef } from "react";
+import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
 import {
   FiArrowRight,
   FiArrowUpRight,
@@ -12,9 +13,10 @@ import { BLOGS_PATH, blogs } from "../Data/blogs";
 
 /*
   BLOGS — "Knowledge hub"
-  Featured post (left) + compact list (right). Cards use real cover images
-  when `cover` is set in Data/blogs.js, otherwise a branded navy cover.
-  Scroll animation: featured card rises in, list items slide in from the right.
+  Four posts in a compact 2x2 grid. Cards use real cover images when `cover`
+  is set in Data/blogs.js, otherwise a branded navy cover.
+  Scroll animation: tied to scroll position — left cards slide in from the left,
+  right cards from the right, rising and scaling up as they enter.
 */
 
 const ease = [0.16, 1, 0.3, 1];
@@ -99,68 +101,38 @@ function CategoryChip({ children }) {
   );
 }
 
-function FeaturedPost({ post }) {
+function BlogCard({ post, index }) {
+  const ref = useRef(null);
+  const reduce = useReducedMotion();
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start 98%", "start 62%"] });
+
+  const fromLeft = index % 2 === 0;
+  const x = useTransform(scrollYProgress, [0, 1], [reduce ? 0 : fromLeft ? -60 : 60, 0]);
+  const y = useTransform(scrollYProgress, [0, 1], [reduce ? 0 : 40, 0]);
+  const opacity = useTransform(scrollYProgress, [0, 0.6, 1], [reduce ? 1 : 0, 1, 1]);
+  const scale = useTransform(scrollYProgress, [0, 1], [reduce ? 1 : 0.94, 1]);
+
   return (
-    <motion.article
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.3 }}
-      transition={{ duration: 0.8, ease }}
-      className="h-full"
-    >
+    <motion.li ref={ref} style={{ x, y, opacity, scale }} className="will-change-transform">
       <Link
         to={post.path}
-        className="group flex h-full flex-col overflow-hidden rounded-[30px] border border-[#E2EAF5] bg-white p-3 shadow-[0_16px_40px_rgba(16,41,75,0.08)] transition-[box-shadow,border-color,translate] duration-500 hover:-translate-y-1.5 hover:border-[#9CCBF5] hover:shadow-[0_28px_60px_rgba(23,98,181,0.16)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#70C7FF]/60"
+        className="group grid h-full grid-cols-[104px_1fr] items-center gap-3 rounded-[22px] border border-[#E2EAF5] bg-white p-2 shadow-[0_8px_24px_rgba(16,41,75,0.06)] transition-[box-shadow,border-color,translate] duration-500 hover:-translate-y-1 hover:border-[#9CCBF5] hover:shadow-[0_18px_40px_rgba(23,98,181,0.14)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#70C7FF]/60 motion-reduce:hover:translate-y-0 sm:grid-cols-[148px_1fr] sm:gap-4"
       >
-        <div className="relative aspect-[16/10] overflow-hidden rounded-[22px]">
-          <Cover post={post} large />
-          <span className="absolute right-4 top-4 rounded-full bg-white/90 px-3 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-[#10294B] backdrop-blur">
-            Featured
-          </span>
-        </div>
-
-        <div className="flex flex-1 flex-col px-3 pb-3 pt-6 sm:px-4">
-          <CategoryChip>{post.category}</CategoryChip>
-          <h3 className="mt-4 text-2xl font-extrabold leading-snug tracking-tight text-[#10294B] transition-colors duration-300 group-hover:text-[#1762B5] sm:text-[28px]">
-            {post.title}
-          </h3>
-          <p className="mt-3 text-sm leading-7 text-[#52617D] sm:text-[15px]">{post.excerpt}</p>
-          <span className="mt-auto inline-flex items-center gap-2 pt-6 text-sm font-bold text-[#1762B5]">
-            Read article<span className="sr-only">: {post.title}</span>
-            <FiArrowRight className="transition-transform duration-300 group-hover:translate-x-1.5" />
-          </span>
-        </div>
-      </Link>
-    </motion.article>
-  );
-}
-
-function ListPost({ post, index }) {
-  return (
-    <motion.li
-      initial={{ opacity: 0, x: 40 }}
-      whileInView={{ opacity: 1, x: 0 }}
-      viewport={{ once: true, amount: 0.4 }}
-      transition={{ duration: 0.7, ease, delay: 0.1 + index * 0.12 }}
-    >
-      <Link
-        to={post.path}
-        className="group grid grid-cols-[112px_1fr] items-center gap-4 rounded-[24px] border border-[#E2EAF5] bg-white p-2.5 shadow-[0_10px_28px_rgba(16,41,75,0.05)] transition-[box-shadow,border-color,translate] duration-500 hover:-translate-x-1 hover:border-[#9CCBF5] hover:shadow-[0_20px_44px_rgba(23,98,181,0.13)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#70C7FF]/60 sm:grid-cols-[150px_1fr] sm:gap-5"
-      >
-        <div className="relative aspect-square overflow-hidden rounded-[18px] sm:aspect-[5/4]">
+        <div className="relative aspect-square overflow-hidden rounded-[16px] sm:aspect-[5/4]">
           <Cover post={post} />
         </div>
+
         <div className="min-w-0 py-1 pr-2">
           <CategoryChip>{post.category}</CategoryChip>
-          <h3 className="mt-2.5 line-clamp-2 text-[15px] font-extrabold leading-snug text-[#10294B] transition-colors duration-300 group-hover:text-[#1762B5] sm:text-lg">
+          <h3 className="mt-2 line-clamp-2 text-[15px] font-extrabold leading-snug tracking-tight text-[#10294B] transition-colors duration-300 group-hover:text-[#1762B5] sm:text-base">
             {post.title}
           </h3>
-          <p className="mt-1.5 hidden text-sm leading-6 text-[#52617D] sm:block">
+          <p className="mt-1 hidden text-[13px] leading-5 text-[#52617D] sm:block">
             <span className="line-clamp-2">{post.excerpt}</span>
           </p>
-          <span className="mt-2 inline-flex items-center gap-1.5 text-xs font-bold text-[#1762B5] sm:text-sm">
-            Read<span className="sr-only"> article: {post.title}</span>
-            <FiArrowRight className="transition-transform duration-300 group-hover:translate-x-1" />
+          <span className="mt-2 inline-flex items-center gap-1.5 text-xs font-bold text-[#1762B5] sm:text-[13px]">
+            Read article<span className="sr-only">: {post.title}</span>
+            <FiArrowRight className="transition-transform duration-300 group-hover:translate-x-1.5" />
           </span>
         </div>
       </Link>
@@ -171,10 +143,10 @@ function ListPost({ post, index }) {
 // BLOGS
 export default function BlogsSection() {
   if (blogs.length === 0) return null;
-  const [featured, ...rest] = blogs;
+  const posts = blogs.slice(0, 4);
 
   return (
-    <section aria-labelledby="blogs-heading" className="relative overflow-hidden bg-gradient-to-b from-white to-[#F7FAFF] py-14 sm:py-16 lg:py-20">
+    <section aria-labelledby="blogs-heading" className="relative overflow-x-clip bg-gradient-to-b from-white to-[#F7FAFF] py-10 sm:py-12 lg:py-14">
       <div aria-hidden="true" className="pointer-events-none absolute -right-40 top-10 h-96 w-96 rounded-full bg-[#70C7FF]/15 blur-3xl" />
 
       <div className="relative mx-auto max-w-7xl px-5 sm:px-8">
@@ -183,10 +155,10 @@ export default function BlogsSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.5 }}
           transition={{ duration: 0.7, ease }}
-          className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end"
+          className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end"
         >
           <div className="max-w-2xl">
-            <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#1762B5]/15 bg-white px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-[#1762B5] shadow-sm">
+            <span className="mb-3 inline-flex items-center gap-2 rounded-full border border-[#1762B5]/15 bg-white px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-[#1762B5] shadow-sm">
               <span className="h-2 w-2 rounded-full bg-[#1762B5]" />
               Knowledge hub
             </span>
@@ -194,7 +166,7 @@ export default function BlogsSection() {
               Ideas and insights for
               <span className="text-[#1762B5]"> your next step</span>
             </h2>
-            <p className="mt-4 max-w-xl text-sm leading-7 text-[#52617D] sm:text-base">
+            <p className="mt-3 max-w-xl text-sm leading-7 text-[#52617D] sm:text-base">
               Career guidance, course explainers and study tips from the Catalyst team.
             </p>
           </div>
@@ -208,16 +180,11 @@ export default function BlogsSection() {
           </Link>
         </motion.div>
 
-        <div className="mt-8 grid gap-6 sm:mt-10 lg:grid-cols-[1.1fr_1fr] lg:gap-8">
-          <FeaturedPost post={featured} />
-          {rest.length > 0 && (
-            <ul className="flex flex-col justify-between gap-4 sm:gap-5">
-              {rest.map((post, index) => (
-                <ListPost key={post.slug} post={post} index={index} />
-              ))}
-            </ul>
-          )}
-        </div>
+        <ul className="mt-6 grid gap-[7px] sm:mt-8 lg:grid-cols-2">
+          {posts.map((post, index) => (
+            <BlogCard key={post.slug} post={post} index={index} />
+          ))}
+        </ul>
       </div>
     </section>
   );
